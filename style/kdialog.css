@@ -1,0 +1,22 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+.kdialog {
+	background: #eee;
+	border: 1px solid #ddd;
+	font: 12px sans-serif;
+	width: 450px;
+	margin: 50px auto;
+	padding: 30px;
+	display: none;
+}
+.kdialog h1 {
+	font-size: 18px;;
+	margin-bottom: 10px;
+}
+.kdialog p {
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 10px;
+}
