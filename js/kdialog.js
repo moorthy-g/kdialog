@@ -18,14 +18,22 @@
 	};
 
 	KDialog.prototype.init = function() {
+		var $element = $(this.element);
+		$element.on("click", "[data-action=close]", function(){
+			$element.data(pluginName).close();
+		});
 		console.log("KDialog initiated successfully");
 	};
 
 	KDialog.prototype.open = function() {
+		var $element = $(this.element);
+		$element.show();
 		console.log("KDialog opened");
 	};
 
 	KDialog.prototype.close = function() {
+		var $element = $(this.element);
+		$element.hide();
 		console.log("KDialog closed");
 	};
 
@@ -34,7 +42,7 @@
 	};
 
 	// plugin wrapper around the constructor,
-	$.fn[pluginName] = function(options){
+	$.fn[pluginName] = function(options) {
 		return this.each(function(){
 			if(! $.data(this, pluginName)) 
 				$.data(this, pluginName, new KDialog(this, options));  //instance
