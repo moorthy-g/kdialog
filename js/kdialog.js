@@ -10,36 +10,59 @@
 			close: function(){}
 		};
 
-	// The actual plugin constructor
+	// The plugin constructor
 	function KDialog(element, options) {
 		this.element = element;
+		this.isOpen = false;
 		this.settings = $.extend(defaults, options);
-		this.init();
+		this.init();		
 	};
 
-	KDialog.prototype.init = function() {
-		var $element = $(this.element);
-		$element.on("click", "[data-action=close]", function(){
-			$element.data(pluginName).close();
-		});
-		console.log("KDialog initiated successfully");
-	};
+	//private & public methods
+	KDialog.prototype = (function(){
+		
+		var _busy = false;
 
-	KDialog.prototype.open = function() {
-		var $element = $(this.element);
-		$element.show();
-		console.log("KDialog opened");
-	};
+		var _private = function(){
+			console.log("private method");
+		};
 
-	KDialog.prototype.close = function() {
-		var $element = $(this.element);
-		$element.hide();
-		console.log("KDialog closed");
-	};
+		var init = function() {
+			var _self = this, $element = $(this.element);
+			$element.on("click", "[data-action=close]", function(){
+				close.call(_self);
+			});
+			console.log("KDialog initiated");
+		};
 
-	KDialog.prototype.destroy = function() {
-		console.log("KDialog destroyed");
-	};
+		var open = function() {
+			var _self = this, $element = $(this.element);
+			$element.show();
+			//add class for animation
+			$element.addClass("in");
+			this.isOpen = true;
+			console.log("KDialog opened");
+		};
+
+		var close = function() {
+			var _self = this, $element = $(this.element);
+			$element.hide();
+			//remove class for animation
+			$element.addClass("out");
+			console.log("KDialog closed");
+		};
+
+		var destroy = function() {
+			var _self = this, $element = $(this.element);
+			console.log("KDialog destroyed");
+		}
+
+		//return public methods
+		return {
+			init: init,	open: open, close: close, destroy: destroy
+		};
+
+	})();
 
 	// plugin wrapper around the constructor,
 	$.fn[pluginName] = function(options) {
