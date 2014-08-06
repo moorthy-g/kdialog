@@ -19,9 +19,20 @@
 	};
 
 	//private & public methods
-	KDialog.prototype = (function(){
+	KDialog.prototype = function() {
 		
-		var _busy = false;
+		var _busy = false, 
+
+		//serve touch events for touchscreen
+		/* 
+			todo:
+			How touch events behave in touchscreen laptop with mouse connected?
+			coz we don't bind click events in touch enabled devices
+		 */
+		events = "ontouchstart" in window ?
+				  { click: "touchstart" } :
+				  { click: "click" };
+
 
 		var _private = function(){
 			console.log("private method");
@@ -29,40 +40,48 @@
 
 		var init = function() {
 			var _self = this, $element = $(this.element);
-			$element.on("click", "[data-action=close]", function(){
+			$element.on(events.click, "[data-action=close]", function(e){
+				e.preventDefault();
 				close.call(_self);
 			});
 			console.log("KDialog initiated");
 		};
 
 		var open = function() {
-			var _self = this, $element = $(this.element);
+			// hey, It has opened already. so, return
+			if(this.isOpen) return;
+
+			var _self = this, $element = $(_self.element);
 			$element.show();
 			//add class for animation
 			$element.addClass("in");
-			this.isOpen = true;
+			_self.isOpen = true;
 			console.log("KDialog opened");
 		};
 
 		var close = function() {
-			var _self = this, $element = $(this.element);
+			// nothing to close. so, return
+			if(!this.isOpen) return;
+
+			var _self = this, $element = $(_self.element);
 			$element.hide();
 			//remove class for animation
 			$element.addClass("out");
+			_self.isOpen = false;
 			console.log("KDialog closed");
 		};
 
 		var destroy = function() {
-			var _self = this, $element = $(this.element);
+			var _self = this, $element = $(_self.element);
 			console.log("KDialog destroyed");
-		}
+		};
 
 		//return public methods
 		return {
 			init: init,	open: open, close: close, destroy: destroy
 		};
 
-	})();
+	}();
 
 	// plugin wrapper around the constructor,
 	$.fn[pluginName] = function(options) {
