@@ -20,3 +20,68 @@
 	color: #666;
 	margin-bottom: 10px;
 }
+.kdialog.in {
+	-moz-animation: in 1s ease;
+	-webkit-animation: in 1s ease;
+}
+.kdialog.out {
+	-moz-animation: in 1s reverse ease;
+	-webkit-animation: in 1s reverse ease;
+}
+
+@keyframes in {
+	0% {
+		opacity: 0;
+		transform: rotateX(50deg);
+	}
+	50% {
+		opacity: 1;
+		transform: rotateX(-10deg);
+	}
+	100% {
+		opacity: 1;
+		transform: rotateX(0deg);
+	}
+}
+@-webkit-keyframes in {
+	0% {
+		opacity: 0;
+		-webkit-transform: rotateX(50deg);
+	}
+	50% {
+		opacity: 1;
+		-webkit-transform: rotateX(-10deg);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: rotateX(0deg);
+	}
+}
+@-moz-keyframes in {
+	0% {
+		opacity: 0;
+		-moz-transform: rotateX(50deg);
+	}
+	50% {
+		opacity: 1;
+		-moz-transform: rotateX(-10deg);
+	}
+	100% {
+		opacity: 1;
+		-moz-transform: rotateX(0deg);
+	}
+}
+@-ms-keyframes in {
+	0% {
+		opacity: 0;
+		-ms-transform: rotateX(50deg);
+	}
+	50% {
+		opacity: 1;
+		-ms-transform: rotateX(-10deg);
+	}
+	100% {
+		opacity: 1;
+		-ms-transform: rotateX(0deg);
+	}
+}
