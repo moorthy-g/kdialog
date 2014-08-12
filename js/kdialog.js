@@ -22,7 +22,7 @@
 	//private & public methods
 	KDialog.prototype = function() {
 		
-		var _busy = false, _animationEndEvent, _transitionEndEvent,
+		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent,
 
 		//serve touch events for touchscreen
 		/* 
@@ -38,22 +38,23 @@
 			console.log("private method");
 		};
 
-		var _getPrefixedEndEvent = function(prop) {
+		var _getPrefixedProperty = function(prop) {
 			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
 
 			if(element.style[prop] == "")
-				return prop + "End"; //return standard event
+				return prop; //return standard property
 
 			prop = prop.charAt(0).toUpperCase() + prop.slice(1);
 			for(var i = 0; i<prefix.length; i++) {
 				if(element.style[prefix[i] + prop] == "")
-					return prefix[i] + prop + "End"; //return prefixed event
+					return prefix[i] + prop; //return prefixed property
 			}
 		};
 
 		var _initStaticScope = function() {
-			_animationEndEvent = _getPrefixedEndEvent("animation"),
-			_transitionEndEvent = _getPrefixedEndEvent("transition");
+			_animationPrefixed = _getPrefixedProperty("animation"),
+			_transitionPrefixed = _getPrefixedProperty("transition");
+			_animationEndEvent = _animationPrefixed + (_animationPrefixed === "animation"?"end":"End");
 		};
 
 		var init = function() {
@@ -67,25 +68,53 @@
 
 		var open = function() {
 			// hey, It has opened already. so, return
-			if(this.isOpen) return;
+			if(this.isOpen || _busy) return;
 
-			var _self = this, $element = $(_self.element);
+			var _self = this, $element = $(_self.element), animations;
+
+			_busy = true;
+			_self.isOpen = true;	
 			$element.show();
-			//add class for animation
 			$element.addClass("in");
-			_self.isOpen = true;
+			animations = _animationPrefixed + "Name";
+
+			if(animations) {
+				$element.on(_animationEndEvent, function() {
+					$element.off(_animationEndEvent);
+					$element.removeClass("in");
+					_busy = false;
+					console.log("open end");
+				});
+			} else {
+
+			};
+ 
+			
 			console.log("KDialog opened");
 		};
 
 		var close = function() {
 			// nothing to close. so, return
-			if(!this.isOpen) return;
+			if(!this.isOpen || _busy) return;
 
-			var _self = this, $element = $(_self.element);
-			$element.hide();
-			//remove class for animation
+			var _self = this, $element = $(_self.element), animations;
+
+			_busy = true;
 			$element.addClass("out");
-			_self.isOpen = false;
+			animations = _animationPrefixed + "Name";
+
+			if(animations) {
+				$element.on(_animationEndEvent, function() {
+					$element.off(_animationEndEvent);
+					$element.removeClass("out").hide();
+					_self.isOpen = false;
+					_busy = false;
+					console.log("close end");
+				});
+			} else {
+
+			};
+
 			console.log("KDialog closed");
 		};
 

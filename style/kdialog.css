@@ -21,12 +21,16 @@
 	margin-bottom: 10px;
 }
 .kdialog.in {
-	-moz-animation: in 1s ease;
-	-webkit-animation: in 1s ease;
+	animation: in 1s;
+	-moz-animation: in 1s;
+	-webkit-animation: in 1s;
+	-ms-animation: in 1s;
 }
 .kdialog.out {
-	-moz-animation: in 1s reverse ease;
-	-webkit-animation: in 1s reverse ease;
+	animation: in 0.3s reverse;
+	-moz-animation: in 0.3s reverse;
+	-webkit-animation: in 0.3s reverse;
+	-ms-animation: in 0.3s reverse;
 }
 
 @keyframes in {
