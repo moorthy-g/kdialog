@@ -50,6 +50,11 @@
 			}
 		};
 
+		var _initStaticScope = function() {
+			_animationEndEvent = _getPrefixedEndEvent("animation"),
+			_transitionEndEvent = _getPrefixedEndEvent("transition");
+		};
+
 		var init = function() {
 			var _self = this, $element = $(this.element);
 			$element.on(events.click, "[data-action=close]", function(e){
@@ -87,6 +92,8 @@
 			var _self = this, $element = $(_self.element);
 			console.log("KDialog destroyed");
 		};
+
+		_initStaticScope();
 
 		//return public methods
 		return {
