@@ -6,6 +6,7 @@
 	// Create the defaults once
 	var pluginName = "kdialog",
 		defaults = {
+			css: true, 
 			open: function(){},
 			close: function(){}
 		};
