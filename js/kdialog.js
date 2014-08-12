@@ -21,7 +21,7 @@
 	//private & public methods
 	KDialog.prototype = function() {
 		
-		var _busy = false, 
+		var _busy = false, _animationEndEvent, _transitionEndEvent,
 
 		//serve touch events for touchscreen
 		/* 
@@ -33,9 +33,21 @@
 				  { click: "touchstart" } :
 				  { click: "click" };
 
-
-		var _private = function(){
+		var _private = function() {
 			console.log("private method");
+		};
+
+		var _getPrefixedEndEvent = function(prop) {
+			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
+
+			if(element.style[prop] == "")
+				return prop + "End"; //return standard event
+
+			prop = prop.charAt(0).toUpperCase() + prop.slice(1);
+			for(var i = 0; i<prefix.length; i++) {
+				if(element.style[prefix[i] + prop] == "")
+					return prefix[i] + prop + "End"; //return prefixed event
+			}
 		};
 
 		var init = function() {
