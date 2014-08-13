@@ -2,6 +2,11 @@
 	margin: 0;
 	padding: 0;
 }
+body {
+	perspective: 500px;
+	-moz-perspective: 500px;
+	-webkit-perspective: 500px;
+}
 .kdialog {
 	background: #eee;
 	border: 1px solid #ddd;
@@ -21,71 +26,74 @@
 	margin-bottom: 10px;
 }
 .kdialog.in {
-	animation: in 1s;
-	-moz-animation: in 1s;
-	-webkit-animation: in 1s;
-	-ms-animation: in 1s;
+	animation: in 0.5s;
+	-moz-animation: in 0.5s;
+	-webkit-animation: in 0.5s;
 }
 .kdialog.out {
-	animation: in 0.3s reverse;
-	-moz-animation: in 0.3s reverse;
-	-webkit-animation: in 0.3s reverse;
-	-ms-animation: in 0.3s reverse;
+	animation: out 0.5s;
+	-moz-animation: out 0.5s;
+	-webkit-animation: out 0.5s;
 }
 
 @keyframes in {
 	0% {
 		opacity: 0;
-		transform: rotateX(50deg);
-	}
-	50% {
-		opacity: 1;
-		transform: rotateX(-10deg);
+		transform: rotateX(-100deg) translateY(400px) scale(0);
 	}
 	100% {
 		opacity: 1;
-		transform: rotateX(0deg);
+		transform: rotateX(0deg) translateY(0) scale(1);
 	}
 }
 @-webkit-keyframes in {
 	0% {
 		opacity: 0;
-		-webkit-transform: rotateX(50deg);
-	}
-	50% {
-		opacity: 1;
-		-webkit-transform: rotateX(-10deg);
+		-webkit-transform: rotateX(-100deg) translateY(400px) scale(0);
 	}
 	100% {
 		opacity: 1;
-		-webkit-transform: rotateX(0deg);
+		-webkit-transform: rotateX(0deg) translateY(0) scale(1);
 	}
 }
 @-moz-keyframes in {
 	0% {
 		opacity: 0;
-		-moz-transform: rotateX(50deg);
-	}
-	50% {
-		opacity: 1;
-		-moz-transform: rotateX(-10deg);
+		-moz-transform: rotateX(-100deg) translateY(400px) scale(0);
 	}
 	100% {
 		opacity: 1;
-		-moz-transform: rotateX(0deg);
+		-moz-transform: rotateX(0deg) translateY(0) scale(1);
 	}
 }
-@-ms-keyframes in {
+
+@keyframes out {
 	0% {
-		opacity: 0;
-		-ms-transform: rotateX(50deg);
-	}
-	50% {
 		opacity: 1;
-		-ms-transform: rotateX(-10deg);
+		transform: rotateX(0deg) translateY(0) scale(1);
 	}
 	100% {
+		opacity: 0;
+		transform: rotateX(140deg) translateY(-800px) scale(0);
+	}
+}
+@-webkit-keyframes out {
+	0% {
 		opacity: 1;
-		-ms-transform: rotateX(0deg);
+		-webkit-transform: rotateX(0deg) translateY(0) scale(1);
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: rotateX(140deg) translateY(-800px) scale(0);
+	}
+}
+@-moz-keyframes out {
+	0% {
+		opacity: 1;
+		-moz-transform: rotateX(0deg) translateY(0) scale(1);
+	}
+	100% {
+		opacity: 0;
+		-moz-transform: rotateX(140deg) translateY(-800px) scale(0);
 	}
 }
