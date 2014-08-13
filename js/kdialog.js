@@ -45,7 +45,9 @@
 		var _initStaticScope = function() {
 			_animationPrefixed = _getPrefixedProperty("animation"),
 			_transitionPrefixed = _getPrefixedProperty("transition");
-			_animationEndEvent = _animationPrefixed + (_animationPrefixed === "animation"?"end":"End");
+			if(_animationPrefixed) {
+				_animationEndEvent = _animationPrefixed + (_animationPrefixed === "animation"?"end":"End");
+			};
 		};
 
 		var _open = function() {
@@ -80,7 +82,8 @@
 			_self.settings.beforeOpen(); //callback
 			$element.show();
 
-			if(_self.settings.css) { //go for css animation if css set to true
+			//go for css animation if css set to true & browser supports animation
+			if(_self.settings.css && _animationEndEvent) { 
 				$element.addClass("in");
 				animations = _animationPrefixed + "Name";
 				if($element.css(animations) != "none") { //if any css animation, perform.
@@ -108,7 +111,8 @@
 			_busy = true;
 			_self.settings.beforeClose();
 
-			if(_self.settings.css) { //go for css animation if css set to true
+			//go for css animation if css set to true & browser supports animation
+			if(_self.settings.css  && _animationEndEvent) { 
 				$element.addClass("out");
 				animations = _animationPrefixed + "Name";
 				if($element.css(animations) != "none") { //if any css animation, perform.
