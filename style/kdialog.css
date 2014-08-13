@@ -2,15 +2,19 @@
 	margin: 0;
 	padding: 0;
 }
+body {
+	overflow: hidden;
+}
 .kdialog {
-	background: #eee;
-	border: 1px solid #ddd;
-	font: 12px sans-serif;
-	width: 450px;
-	margin: 0 auto;
-	padding: 30px;
 	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	height: 300%;
 	z-index: 1000;
+	perspective: 500px;
+	-webkit-perspective: 500px;
+	-moz-perspective: 500px;
 	display: none;
 }
 .kdialog h1 {
@@ -22,6 +26,15 @@
 	color: #666;
 	margin-bottom: 10px;
 }
+.kcontent {
+	background: #eee;
+	border: 1px solid #ddd;
+	font: 12px sans-serif;
+	width: 450px;
+	margin: 0 auto;
+	padding: 30px;
+	margin-top: 200px;
+}
 .koverlay {
 	background: rgba(0,0,0,0.8);
 	position: fixed;
@@ -32,12 +45,12 @@
 	z-index: 999;
 	display: none;
 }
-.kdialog.in {
+.kcontent.in {
 	animation: in 0.5s;
 	-moz-animation: in 0.5s;
 	-webkit-animation: in 0.5s;
 }
-.kdialog.out {
+.kcontent.out {
 	animation: out 0.5s;
 	-moz-animation: out 0.5s;
 	-webkit-animation: out 0.5s;

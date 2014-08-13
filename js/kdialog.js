@@ -7,7 +7,7 @@
 	var pluginName = "kdialog",
 		defaults = {
 			css: true,
-			modal: true,
+			modal: false,
 			beforeOpen: function(){},
 			beforeClose: function(){},
 			open: function(){},
@@ -91,7 +91,8 @@
 			// It has opened. so, return
 			if(this.isOpen || _busy) return;
 
-			var _self = this, $element = $(_self.element), animations;
+			var _self = this, $element = $(_self.element),
+			$dialog = $(_self.element.children[0]), animations;
 
 			_busy = true; //make the object busy
 			_self.isOpen = true; 
@@ -104,16 +105,16 @@
 
 			//go for css animation if css set to true & browser supports animation
 			if(_self.settings.css && _animationEndEvent) { 
-				$element.addClass("in");
+				$dialog.addClass("in");
 				animations = _animationPrefixed + "Name";
-				if($element.css(animations) != "none") { //if any css animation, perform.
-					$element.on(_animationEndEvent, function() {
-						$element.off(_animationEndEvent);
-						$element.removeClass("in");
+				if($dialog.css(animations) != "none") { //if any css animation, perform.
+					$dialog.on(_animationEndEvent, function() {
+						$dialog.off(_animationEndEvent);
+						$dialog.removeClass("in");
 						_open.call(_self);
 					});
 				} else { //else, degrade gracefully
-					$element.removeClass("in");
+					$dialog.removeClass("in");
 					_open.call(_self);
 				};
 			}
@@ -127,22 +128,23 @@
 			// nothing to close. so, return
 			if(!this.isOpen || _busy) return;
 
-			var _self = this, $element = $(_self.element), animations;
+			var _self = this, $element = $(_self.element),
+			$dialog = $(_self.element.children[0]), animations;
 
 			_busy = true;
 			_self.settings.beforeClose();
 
 			//go for css animation if css set to true & browser supports animation
 			if(_self.settings.css  && _animationEndEvent) { 
-				$element.addClass("out");
+				$dialog.addClass("out");
 				animations = _animationPrefixed + "Name";
-				if($element.css(animations) != "none") { //if any css animation, perform.
-					$element.on(_animationEndEvent, function() {
-						$element.off(_animationEndEvent).removeClass("out");
+				if($dialog.css(animations) != "none") { //if any css animation, perform.
+					$dialog.on(_animationEndEvent, function() {
+						$dialog.off(_animationEndEvent).removeClass("out");
 						_close.call(_self);
 					});
 				} else { //else, degrade gracefully
-					$element.removeClass("out");
+					$dialog.removeClass("out");
 					_close.call(_self);
 				}
 			} else { //if css set to false, go without css animation
