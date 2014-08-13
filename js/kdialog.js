@@ -6,7 +6,8 @@
 	// Create the defaults once
 	var pluginName = "kdialog",
 		defaults = {
-			css: true, 
+			css: true,
+			modal: true,
 			beforeOpen: function(){},
 			beforeClose: function(){},
 			open: function(){},
@@ -24,7 +25,7 @@
 	KDialog.prototype = function() { //anonymous scope, builts objects prototype
 
 		//static variables
-		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent;
+		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent, _overlay;
 
 		/*private & public methods*/
 		//returns special vendor prefixed property
@@ -59,7 +60,13 @@
 			$(this.element).hide();
 			_busy = false;
 			this.isOpen = false;
+
+			//hide modal
+			if(this.settings.modal)
+				_overlay.fadeOut(200);
+
 			this.settings.close(); //callback
+
 		};
 
 		var init = function() {
@@ -72,6 +79,12 @@
 			//no fancy css animations for old andriod
 			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
 				_self.settings.css = false;
+
+			// initiate overlay one time
+			if(_self.settings.modal && ! _overlay) {
+				_overlay = $("<div class='koverlay'></div>");
+				_overlay.insertBefore($element);
+			}
 		};
 
 		var open = function() {
@@ -84,6 +97,10 @@
 			_self.isOpen = true; 
 			_self.settings.beforeOpen(); //callback
 			$element.show();
+
+			//show modal
+			if(_self.settings.modal)
+				_overlay.fadeIn(200);
 
 			//go for css animation if css set to true & browser supports animation
 			if(_self.settings.css && _animationEndEvent) { 
@@ -103,6 +120,7 @@
 			else { //if css set to false, go without css animation
 				_open.call(_self);
 			};
+
 		};
 
 		var close = function() {
