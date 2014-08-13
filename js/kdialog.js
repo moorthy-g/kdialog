@@ -69,6 +69,9 @@
 				e.preventDefault();
 				close.call(_self);
 			});
+			//no fancy css animations for old andriod
+			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
+				_self.settings.css = false;
 		};
 
 		var open = function() {
