@@ -21,11 +21,13 @@
 		this.init();		
 	};
 
-	//private & public methods
-	KDialog.prototype = function() {
-		
+	KDialog.prototype = function() { //anonymous scope, builts objects prototype
+
+		//static variables
 		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent;
-		
+
+		/*private & public methods*/
+		//returns special vendor prefixed property
 		var _getPrefixedProperty = function(prop) {
 			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
 
@@ -39,6 +41,7 @@
 			}
 		};
 
+		//set values to static variables
 		var _initStaticScope = function() {
 			_animationPrefixed = _getPrefixedProperty("animation"),
 			_transitionPrefixed = _getPrefixedProperty("transition");
@@ -47,6 +50,7 @@
 
 		var init = function() {
 			var _self = this, $element = $(this.element);
+			// tap any element with [data-action=close], closes the dialog
 			$element.on("touchstart click", "[data-action=close]", function(e){
 				e.preventDefault();
 				close.call(_self);
@@ -54,24 +58,24 @@
 		};
 
 		var open = function() {
-			// hey, It has opened already. so, return
+			// It has opened. so, return
 			if(this.isOpen || _busy) return;
 
 			var _self = this, $element = $(_self.element), animations;
 
-			_busy = true;
-			_self.isOpen = true;	
-			_self.settings.beforeOpen();
+			_busy = true; //make the object busy
+			_self.isOpen = true; 
+			_self.settings.beforeOpen(); //callback
 			$element.show();
 			$element.addClass("in");
 			animations = _animationPrefixed + "Name";
 
-			if(animations) {
+			if(animations) { //perform css animation
 				$element.on(_animationEndEvent, function() {
 					$element.off(_animationEndEvent);
 					$element.removeClass("in");
 					_busy = false;
-					_self.settings.open();
+					_self.settings.open(); //callback
 				});
 			} else {
 
@@ -89,7 +93,7 @@
 			_self.settings.beforeClose();
 			animations = _animationPrefixed + "Name";
 
-			if(animations) {
+			if(animations) { //perform css animation
 				$element.on(_animationEndEvent, function() {
 					$element.off(_animationEndEvent);
 					$element.removeClass("out").hide();
