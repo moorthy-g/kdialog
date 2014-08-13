@@ -25,11 +25,7 @@
 	KDialog.prototype = function() {
 		
 		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent;
-
-		var _private = function() {
-			console.log("private method");
-		};
-
+		
 		var _getPrefixedProperty = function(prop) {
 			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
 
@@ -55,7 +51,6 @@
 				e.preventDefault();
 				close.call(_self);
 			});
-			console.log("KDialog initiated");
 		};
 
 		var open = function() {
@@ -77,14 +72,10 @@
 					$element.removeClass("in");
 					_busy = false;
 					_self.settings.open();
-					console.log("open end");
 				});
 			} else {
 
 			};
- 
-			
-			console.log("KDialog opened");
 		};
 
 		var close = function() {
@@ -105,18 +96,14 @@
 					_self.isOpen = false;
 					_busy = false;
 					_self.settings.close();
-					console.log("close end");
 				});
 			} else {
 
 			};
-
-			console.log("KDialog closed");
 		};
 
 		var destroy = function() {
 			var _self = this, $element = $(_self.element);
-			console.log("KDialog destroyed");
 		};
 
 		_initStaticScope();
