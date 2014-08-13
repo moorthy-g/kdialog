@@ -7,6 +7,8 @@
 	var pluginName = "kdialog",
 		defaults = {
 			css: true, 
+			beforeOpen: function(){},
+			beforeClose: function(){},
 			open: function(){},
 			close: function(){}
 		};
@@ -64,6 +66,7 @@
 
 			_busy = true;
 			_self.isOpen = true;	
+			_self.settings.beforeOpen();
 			$element.show();
 			$element.addClass("in");
 			animations = _animationPrefixed + "Name";
@@ -73,6 +76,7 @@
 					$element.off(_animationEndEvent);
 					$element.removeClass("in");
 					_busy = false;
+					_self.settings.open();
 					console.log("open end");
 				});
 			} else {
@@ -91,6 +95,7 @@
 
 			_busy = true;
 			$element.addClass("out");
+			_self.settings.beforeClose();
 			animations = _animationPrefixed + "Name";
 
 			if(animations) {
@@ -99,6 +104,7 @@
 					$element.removeClass("out").hide();
 					_self.isOpen = false;
 					_busy = false;
+					_self.settings.close();
 					console.log("close end");
 				});
 			} else {
