@@ -48,6 +48,18 @@
 			_animationEndEvent = _animationPrefixed + (_animationPrefixed === "animation"?"end":"End");
 		};
 
+		var _open = function() {
+			_busy = false;
+			this.settings.open(); //callback
+		};
+
+		var _close = function() {
+			$(this.element).hide();
+			_busy = false;
+			this.isOpen = false;
+			this.settings.close(); //callback
+		};
+
 		var init = function() {
 			var _self = this, $element = $(this.element);
 			// tap any element with [data-action=close], closes the dialog
@@ -67,18 +79,23 @@
 			_self.isOpen = true; 
 			_self.settings.beforeOpen(); //callback
 			$element.show();
-			$element.addClass("in");
-			animations = _animationPrefixed + "Name";
 
-			if(animations) { //perform css animation
-				$element.on(_animationEndEvent, function() {
-					$element.off(_animationEndEvent);
+			if(_self.settings.css) { //go for css animation if css set to true
+				$element.addClass("in");
+				animations = _animationPrefixed + "Name";
+				if($element.css(animations) != "none") { //if any css animation, perform.
+					$element.on(_animationEndEvent, function() {
+						$element.off(_animationEndEvent);
+						$element.removeClass("in");
+						_open.call(_self);
+					});
+				} else { //else, degrade gracefully
 					$element.removeClass("in");
-					_busy = false;
-					_self.settings.open(); //callback
-				});
-			} else {
-
+					_open.call(_self);
+				};
+			}
+			else { //if css set to false, go without css animation
+				_open.call(_self);
 			};
 		};
 
@@ -89,21 +106,24 @@
 			var _self = this, $element = $(_self.element), animations;
 
 			_busy = true;
-			$element.addClass("out");
 			_self.settings.beforeClose();
-			animations = _animationPrefixed + "Name";
 
-			if(animations) { //perform css animation
-				$element.on(_animationEndEvent, function() {
-					$element.off(_animationEndEvent);
-					$element.removeClass("out").hide();
-					_self.isOpen = false;
-					_busy = false;
-					_self.settings.close();
-				});
-			} else {
+			if(_self.settings.css) { //go for css animation if css set to true
+				$element.addClass("out");
+				animations = _animationPrefixed + "Name";
+				if($element.css(animations) != "none") { //if any css animation, perform.
+					$element.on(_animationEndEvent, function() {
+						$element.off(_animationEndEvent).removeClass("out");
+						_close.call(_self);
+					});
+				} else { //else, degrade gracefully
+					$element.removeClass("out");
+					_close.call(_self);
+				}
+			} else { //if css set to false, go without css animation
+				_close.call(_self);
+			}
 
-			};
 		};
 
 		var destroy = function() {
