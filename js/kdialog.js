@@ -22,17 +22,7 @@
 	//private & public methods
 	KDialog.prototype = function() {
 		
-		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent,
-
-		//serve touch events for touchscreen
-		/* 
-			todo:
-			How touch events behave in touchscreen laptop with mouse connected?
-			coz we don't bind click events in touch enabled devices
-		 */
-		events = "ontouchstart" in window ?
-				  { click: "touchstart" } :
-				  { click: "click" };
+		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent;
 
 		var _private = function() {
 			console.log("private method");
@@ -59,7 +49,7 @@
 
 		var init = function() {
 			var _self = this, $element = $(this.element);
-			$element.on(events.click, "[data-action=close]", function(e){
+			$element.on("touchstart click", "[data-action=close]", function(e){
 				e.preventDefault();
 				close.call(_self);
 			});
