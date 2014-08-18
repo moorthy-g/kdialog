@@ -1,15 +1,28 @@
 {
-  "name": "kDialog",
-  "version": "0.0.0",
-  "description": "",
-  "dependencies": {
-  },
+  "name": "kdialog.jquery",
+  "title": "kDialog",
+  "version": "0.0.1-pre",
+  "description": "Simple jQuery dialog, made for drop jaws with awesome CSS & JS animations",
+  "homepage": "",
+  "dependencies": {},
   "devDependencies": {
-    "grunt": "^0.4.5"
+    "grunt": "^0.4.5",
+    "grunt-contrib-uglify": "^0.5.1",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-watch": "^0.6.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Moorthy G",
-  "license": "ISC"
+  "author": {
+    "name": "Moorthy G",
+    "email": "moorthy.g@krds.com",
+    "company": "KRDS",
+    "license": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/moorthy-g/kdialog.git"
+  }
 }
