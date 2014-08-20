@@ -10,7 +10,7 @@
 			modal: false,
 			actionHandlers: {},
 			wrapper: false,
-			position: null,
+			position: ["center","center"], //null/integer
 			beforeOpen: function(){},
 			beforeClose: function(){},
 			open: function(){},
@@ -80,15 +80,13 @@
 
 		var _position = function(){
 			if(this.settings.position instanceof Array) {
-				var x = this.settings.position[0], wx,
-					y = this.settings.position[1], wy,
-					$dialog = $(this.element);
+				var x = this.settings.position[0], y = this.settings.position[1];
 
-				x = (x&&x=="center")?(document.documentElement.clientWidth-$dialog.outerWidth())/2+document.body.scrollLeft:x;
-				y = (y&&y=="center")?(document.documentElement.clientHeight-$dialog.outerHeight())/2+document.body.scrollTop:y;
+				x = (x&&x=="center")?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
+				y = (y&&y=="center")?(document.documentElement.clientHeight-this.$wrapper.height())/2:y;
 
-				$dialog.css("left", x);
-				$dialog.css("top",y);
+				this.$wrapper.css("left", x+document.body.scrollLeft);
+				this.$wrapper.css("top", y+document.body.scrollTop);
 			}
 		}
 
