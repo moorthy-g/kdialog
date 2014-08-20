@@ -9,8 +9,9 @@
 	<script>
 		$(document).ready(function(){
 			
-			var kDialog = $("#kdialog").kdialog({
+			kDialog = $("#kdialog").kdialog({
 				wrapper: true,
+				position: ["center","center"],
 				actionHandlers: {
 					"move" : function(){
 						$(this.element).css("marginLeft", "+=100");

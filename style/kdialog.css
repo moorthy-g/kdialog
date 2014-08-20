@@ -8,10 +8,7 @@
 	font: 12px sans-serif;
 	width: 450px;
 	padding: 30px;
-	margin-top: 40px;
 	position: absolute;
-	left: 50%;
-	margin-left: -255px;
 	z-index: 1000;
 	display: none;
 }
