@@ -56,7 +56,7 @@
 
 		var _open = function() {
 			_busy = false;
-			this.settings.open(); //callback
+			this.settings.open.call(this); //callback
 		};
 
 		var _close = function() {
@@ -69,7 +69,7 @@
 			if(this.settings.modal)
 				_overlay.fadeOut(200);
 
-			this.settings.close(); //callback
+			this.settings.close.call(this); //callback
 
 		};
 
@@ -124,7 +124,7 @@
 
 			_busy = true; //make the object busy
 			_self.isOpen = true; 
-			_self.settings.beforeOpen(); //callback
+			_self.settings.beforeOpen.call(_self); //callback
 			_self.$wrapper.show();
 
 			//set position
@@ -163,7 +163,7 @@
 			var _self = this, $dialog = $(_self.element), animations;
 
 			_busy = true;
-			_self.settings.beforeClose();
+			_self.settings.beforeClose.call(_self);
 
 			//go for css animation if css set to true & browser supports animation
 			if(_self.settings.css  && _animationEndEvent) { 
