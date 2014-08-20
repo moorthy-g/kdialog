@@ -10,12 +10,15 @@
 		$(document).ready(function(){
 			
 			var kDialog = $("#kdialog").kdialog({
+				wrapper: false,
 				actionHandlers: {
 					"move" : function(){
 						$(this.element).css("marginLeft", "+=100");
 					}
 				}
 			}).data("kdialog");
+
+			console.log(kDialog);
 
 			//events
 			$("#kopen").click(function(){

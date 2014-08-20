@@ -59,7 +59,13 @@
 		};
 
 		var _close = function() {
-			$(this.element).hide();
+			
+			//if the object has wrapper, close wrapper
+			if(this.settings.wrapper) 
+				this.$wrapper.hide();
+			else
+				$(this.element).hide();
+
 			_busy = false;
 			this.isOpen = false;
 
@@ -73,6 +79,21 @@
 
 		var init = function() {
 			var _self = this, $dialog = $(this.element);
+
+			// initiate overlay one time
+			if(_self.settings.modal && ! _overlay) {
+				_overlay = $("<div class='koverlay'></div>");
+				_overlay.insertBefore($dialog);
+			}
+
+			 if(_self.settings.wrapper && !_self.$wrapper) {
+			 	//create a wrapper. if the wrapper value is string, add it as a class for wrapper
+			 	_self.$wrapper = $("<div class='kwrapper"+(typeof _self.settings.wrapper=="string"?" "+_self.settings.wrapper:"")+"'></div>");
+			 	_self.$wrapper.hide();
+			 	$dialog.wrap(_self.$wrapper).show();
+			 	_self.$wrapper = $dialog.parent();
+			 }
+
 			/* tap any element that has [data-action=*], it performs the correspondent action handler
 			defined in plugin settings*/
 			$dialog.on("touchstart click", "[data-action]", function(e){
@@ -89,11 +110,6 @@
 			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
 				_self.settings.css = false;
 
-			// initiate overlay one time
-			if(_self.settings.modal && ! _overlay) {
-				_overlay = $("<div class='koverlay'></div>");
-				_overlay.insertBefore($dialog);
-			}
 		};
 
 		var open = function() {
@@ -105,14 +121,19 @@
 			_busy = true; //make the object busy
 			_self.isOpen = true; 
 			_self.settings.beforeOpen(); //callback
-			$dialog.show();
+
+			//if the object has wrapper, show wrapper
+			if(_self.settings.wrapper) 
+				_self.$wrapper.show();
+			else
+				$dialog.show();
 
 			//show modal
 			if(_self.settings.modal)
 				_overlay.fadeIn(200);
 
 			//go for css animation if css set to true & browser supports animation
-			if(_self.settings.css && _animationEndEvent) { 
+			if(_self.settings.css && _animationEndEvent) {
 				$dialog.addClass("in");
 				animations = _animationPrefixed + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation, perform.
