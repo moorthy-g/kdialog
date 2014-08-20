@@ -8,9 +8,8 @@
 	<link rel="stylesheet" href="style/kdialog.css">
 	<script>
 		$(document).ready(function(){
-
-			var kDialog = $("#kdialog").kdialog({
-				wrapper: true,
+			
+			kDialog = $("#kdialog").kdialog({
 				actionHandlers: {
 					"move" : function(){
 						$(this.element).css("marginLeft", "+=100");
@@ -18,14 +17,9 @@
 				}
 			}).data("kdialog");
 
-			console.log(kDialog);
-
-			//events
-			$("#kopen").click(function(){
+			$("#kopen").click(function(e){
+				e.preventDefault();
 				kDialog.open();
-			});
-			$("#kclose").click(function(){
-				kDialog.close();
 			});
 		});
 	</script>

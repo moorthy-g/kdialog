@@ -2,18 +2,22 @@
 	margin: 0;
 	padding: 0;
 }
+.kwrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	perspective: 500px;
+	-moz-perspective: 500px;
+	-webkit-perspective: 500px;
+	display: none;
+}
 .kdialog {
 	background: #eee;
 	border: 1px solid #ddd;
 	font: 12px sans-serif;
 	width: 450px;
 	padding: 30px;
-	margin-top: 40px;
-	position: absolute;
-	left: 50%;
-	margin-left: -255px;
-	z-index: 1000;
-	display: none;
 }
 .kdialog h1 {
 	font-size: 18px;;
@@ -23,17 +27,6 @@
 	font-size: 13px;
 	color: #666;
 	margin-bottom: 10px;
-}
-.kwrapper {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	perspective: 500px;
-	-moz-perspective: 500px;
-	-webkit-perspective: 500px;
 }
 .koverlay {
 	background: rgba(0,0,0,0.8);
