@@ -51,9 +51,9 @@
 	-webkit-animation: in 0.5s;
 }
 .kdialog.out {
-	animation: out 0.5s;
-	-moz-animation: out 0.5s;
-	-webkit-animation: out 0.5s;
+	animation: out 0.3s;
+	-moz-animation: out 0.3s;
+	-webkit-animation: out 0.3s;
 }
 
 @keyframes in {
@@ -94,17 +94,17 @@
 	}
 	100% {
 		opacity: 0;
-		transform: rotateX(100deg) translateY(-800px) scale(0);
+		transform: rotateX(0deg) scale(0.9);
 	}
 }
 @-webkit-keyframes out {
 	0% {
 		opacity: 1;
-		-webkit-transform: rotateX(0deg) translateY(0) scale(1);
+		-webkit-transform: rotateX(0deg) scale(1);
 	}
 	100% {
 		opacity: 0;
-		-webkit-transform: rotateX(100deg) translateY(-800px) scale(0);
+		-webkit-transform: rotateX(0deg) scale(0.9);
 	}
 }
 @-moz-keyframes out {
@@ -114,6 +114,6 @@
 	}
 	100% {
 		opacity: 0;
-		-moz-transform: rotateX(100deg) translateY(-800px) scale(0);
+		-moz-transform: rotateX(0deg) scale(0.9);
 	}
 }
