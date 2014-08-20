@@ -8,6 +8,7 @@
 		defaults = {
 			css: true,
 			modal: false,
+			actionHandlers: {},
 			beforeOpen: function(){},
 			beforeClose: function(){},
 			open: function(){},
@@ -71,10 +72,17 @@
 
 		var init = function() {
 			var _self = this, $element = $(this.element);
-			// tap any element with [data-action=close], closes the dialog
-			$element.on("touchstart click", "[data-action=close]", function(e){
+			/* tap any element that has [data-action=*], it performs the correspondent action handler
+			defined in plugin settings*/
+			$element.on("touchstart click", "[data-action]", function(e){
 				e.preventDefault();
-				close.call(_self);
+				var action = this.getAttribute("data-action");
+				if(action === "close") { //default close action handler
+					close.call(_self);	
+				} else {
+					_self.settings.actionHandlers[action].call(_self);
+				}
+				
 			});
 			//no fancy css animations for old andriod
 			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
