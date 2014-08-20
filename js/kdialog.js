@@ -9,6 +9,7 @@
 			css: true,
 			modal: false,
 			actionHandlers: {},
+			wrapper: false,
 			beforeOpen: function(){},
 			beforeClose: function(){},
 			open: function(){},
@@ -71,10 +72,10 @@
 		};
 
 		var init = function() {
-			var _self = this, $element = $(this.element);
+			var _self = this, $dialog = $(this.element);
 			/* tap any element that has [data-action=*], it performs the correspondent action handler
 			defined in plugin settings*/
-			$element.on("touchstart click", "[data-action]", function(e){
+			$dialog.on("touchstart click", "[data-action]", function(e){
 				e.preventDefault();
 				var action = this.getAttribute("data-action");
 				if(action === "close") { //default close action handler
@@ -91,7 +92,7 @@
 			// initiate overlay one time
 			if(_self.settings.modal && ! _overlay) {
 				_overlay = $("<div class='koverlay'></div>");
-				_overlay.insertBefore($element);
+				_overlay.insertBefore($dialog);
 			}
 		};
 
@@ -99,13 +100,12 @@
 			// It has opened. so, return
 			if(this.isOpen || _busy) return;
 
-			var _self = this, $element = $(_self.element),
-			$dialog = $(_self.element.children[0]), animations;
+			var _self = this, $dialog = $(_self.element), animations;
 
 			_busy = true; //make the object busy
 			_self.isOpen = true; 
 			_self.settings.beforeOpen(); //callback
-			$element.show();
+			$dialog.show();
 
 			//show modal
 			if(_self.settings.modal)
@@ -136,8 +136,7 @@
 			// nothing to close. so, return
 			if(!this.isOpen || _busy) return;
 
-			var _self = this, $element = $(_self.element),
-			$dialog = $(_self.element.children[0]), animations;
+			var _self = this, $dialog = $(_self.element), animations;
 
 			_busy = true;
 			_self.settings.beforeClose();
@@ -162,7 +161,7 @@
 		};
 
 		var destroy = function() {
-			var _self = this, $element = $(_self.element);
+			var _self = this, $dialog = $(_self.element);
 		};
 
 		_initStaticScope();
