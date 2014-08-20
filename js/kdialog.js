@@ -9,7 +9,7 @@
 			css: true,
 			modal: false,
 			actionHandlers: {},
-			wrapper: false,
+			wrapperClass: null,
 			position: ["center","center"], //null/integer
 			beforeOpen: function(){},
 			beforeClose: function(){},
@@ -25,7 +25,7 @@
 		this.init();		
 	};
 
-	KDialog.prototype = function() { //anonymous scope, builts objects prototype
+	KDialog.prototype = function() { //anonymous scope, builds objects prototype
 
 		//static variables
 		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent, _overlay;
@@ -61,12 +61,7 @@
 
 		var _close = function() {
 			
-			//if the object has wrapper, close wrapper
-			if(this.settings.wrapper) 
-				this.$wrapper.hide();
-			else
-				$(this.element).hide();
-
+			this.$wrapper.hide();
 			_busy = false;
 			this.isOpen = false;
 
@@ -99,17 +94,13 @@
 				_overlay.insertBefore($dialog);
 			}
 
-			 if(_self.settings.wrapper && !_self.$wrapper) {
-			 	//create a wrapper. if the wrapper value is string, add it as a class for wrapper
-			 	_self.$wrapper = $("<div class='kwrapper"+(typeof _self.settings.wrapper=="string"?" "+_self.settings.wrapper:"")+"'></div>");
-			 	_self.$wrapper.hide();
-			 	$dialog.wrap(_self.$wrapper).show();
-			 	_self.$wrapper = $dialog.parent();
-			 }
+		 	//create a dialog wrapper. add if any wrapper class
+		 	$dialog.wrap("<div class='kwrapper"+(_self.settings.wrapperClass?" "+_self.settings.wrapperClass:"")+"'></div>");
+		 	_self.$wrapper = $dialog.parent();
 
 			/* tap any element that has [data-action=*], it performs the correspondent action handler
 			defined in plugin settings*/
-			$dialog.on("touchstart click", "[data-action]", function(e){
+			_self.$wrapper.on("touchstart click", "[data-action]", function(e){
 				e.preventDefault();
 				var action = this.getAttribute("data-action");
 				if(action === "close") { //default close action handler
@@ -134,12 +125,7 @@
 			_busy = true; //make the object busy
 			_self.isOpen = true; 
 			_self.settings.beforeOpen(); //callback
-
-			//if the object has wrapper, show wrapper
-			if(_self.settings.wrapper) 
-				_self.$wrapper.show();
-			else
-				$dialog.show();
+			_self.$wrapper.show();
 
 			//set position
 			if(_self.settings.position)
