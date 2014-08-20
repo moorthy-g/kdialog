@@ -3,14 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kdialog</title>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script type="text/javascript" src="dist/kdialog.jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="js/kdialog.js"></script>
 	<link rel="stylesheet" href="style/kdialog.css">
 	<script>
 		$(document).ready(function(){
-
-			var kDialog = $("#kdialog").kdialog({
-				wrapper: true,
+			
+			kDialog = $("#kdialog").kdialog({
 				actionHandlers: {
 					"move" : function(){
 						$(this.element).css("marginLeft", "+=100");
@@ -18,14 +17,9 @@
 				}
 			}).data("kdialog");
 
-			console.log(kDialog);
-
-			//events
-			$("#kopen").click(function(){
+			$("#kopen").click(function(e){
+				e.preventDefault();
 				kDialog.open();
-			});
-			$("#kclose").click(function(){
-				kDialog.close();
 			});
 		});
 	</script>
