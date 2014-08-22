@@ -57,3 +57,17 @@ function positionFB(){
 	});
 };
 positionFB();
+
+
+
+//injection
+var s = "<link href=http://localhost/GitHub/kdialog/style/kdialog.css rel=stylesheet></link>"+
+"<script src=http://localhost/GitHub/kdialog/js/kdialog.js></script>";
+$("head").append(s);
+$("#container").css("overflow", "hidden").css("position", "relative").height(1000).append('<div id="kdialog" class="kdialog">'+
+'<h1>Pourquoi cette autorisation</h1>'+
+'<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean placerat magna vitae odio vehicula elementum. Suspendisse potenti. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce rhoncus sollicitudin ipsum, in pharetra urna condimentum nec. Ut ultricies risus sed mi consequat, eu varius nunc ornare. Ut rhoncus libero dignissim velit feugiat iaculis. Mauris ac nulla sed lectus luctus lacinia a vel mi. Fusce sagittis mi lectus, nec suscipit quam iaculis eget. Praesent eleifend varius quam, et pharetra quam.</p>'+
+'<p>Donec ultrices venenatis arcu ut pulvinar. Ut pellentesque magna a euismod tincidunt. Vivamus ut diam et justo sodales molestie. Donec ornare laoreet sem a dictum. Sed sem ante, vestibulum vitae tincidunt ac, sollicitudin et elit. Nullam vel dui id tortor rhoncus ultricies vitae volutpat magna. Nulla mattis mauris sit amet dui imperdiet, ac dignissim metus dictum. Morbi id pellentesque mi, ut ultrices tortor. Nam hendrerit venenatis est, eu lacinia odio blandit aliquet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris dolor lacus, dictum vitae hendrerit eget, sodales sed massa. Sed aliquam velit ac ligula sodales imperdiet. Pellentesque sit amet eros laoreet, cursus diam id, feugiat diam. Duis nec laoreet nisl. Integer gravida, nisl vel luctus facilisis, ipsum neque posuere lorem, et posuere magna urna et neque. Nulla tempus eleifend lorem, id egestas tortor.</p>'+
+'<a href="#" data-action="close">Close Dialog</a>'+
+'<p>An Example for action handlers <a href="#" data-action="move">Move Dialog</a></p></div>');
+$("#kdialog").kdialog().data("kdialog").open();
