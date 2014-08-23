@@ -7,7 +7,7 @@
 	var pluginName = "kdialog",
 		defaults = {
 			css: true,
-			modal: false,
+			modal: true,
 			actionHandlers: {},
 			wrapperClass: null,
 			position: ["center","center"], //null/integer
@@ -77,13 +77,61 @@
 			if(this.settings.position instanceof Array) {
 				var x = this.settings.position[0], y = this.settings.position[1];
 
-				x = (x&&x=="center")?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
-				y = (y&&y=="center")?(document.documentElement.clientHeight-this.$wrapper.height())/2:y;
+				if(window.FB && window.FB.Canvas && y) { //handle placement in facebook canvas mode
+					_handleFBCanvasY.call(this, y);
+				} else { //handle placement in normal mode
+					y = (y&&y=="center")?(document.documentElement.clientHeight-this.$wrapper.height())/2:y;
+					this.$wrapper.css("top", y+document.body.scrollTop);
+				}
 
+				x = (x&&x=="center")?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
 				this.$wrapper.css("left", x+document.body.scrollLeft);
-				this.$wrapper.css("top", y+document.body.scrollTop);
 			}
-		}
+		};
+
+		var _handleFBCanvasY = function(y){
+			/* to place dialog in FB app by getting the visible area of the app canvas */
+			// no fixed headers in canvas page
+			var _self=this, offsetY, visibleTop, visibleBtm, visibleArea, dialogHeight;
+			// for tab page. coverHeight is the static space between bottom of navbar & starting of app iframe
+			var isTab, FBHeaders, coverHeight=389, PageAdminSpaceCorrection = 10;
+
+			window.FB.Canvas.getPageInfo(function(info) {
+				//wheather tab or canvas page
+				isTab = document.documentElement.clientWidth === 810;
+				//find fixed header space of tab page (ex: insights)
+				FBHeaders = isTab?info.offsetTop-coverHeight:0; 
+				//do corrections
+				FBHeaders -= FBHeaders>50?PageAdminSpaceCorrection:0;
+				//iframes' offset top in main window
+				offsetY = info.offsetTop-info.scrollTop-FBHeaders; 
+				// the top most visible pixel of app canvas
+				visibleTop = offsetY<0?Math.abs(offsetY):0; 
+				//the bottom most visible pixel of app canvas
+				visibleBtm = (offsetY<0?info.clientHeight+visibleTop:info.clientHeight-offsetY)-FBHeaders;
+				//don't count pixels beyond app canvas
+				visibleBtm = visibleBtm>document.documentElement.clientHeight?document.documentElement.clientHeight:visibleBtm;
+
+
+				if(y=="center") {
+					visibleArea = visibleBtm-visibleTop;
+					dialogHeight = _self.$wrapper.height();
+
+					// if enough space, place it center
+					if(visibleArea>=dialogHeight)
+						y = (visibleArea-dialogHeight)/2;
+					// if enough space place it center
+					else if(visibleTop+dialogHeight>document.documentElement.clientHeight)
+						y = visibleArea-dialogHeight;
+					// if enough space place it center
+					else
+						y = 0;
+				}
+
+				_self.$wrapper.css("top", y+visibleTop);
+
+			});
+		};
 
 		var init = function() {
 			var _self = this, $dialog = $(this.element);
