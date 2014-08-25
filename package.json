@@ -1,8 +1,8 @@
 {
   "name": "kdialog.jquery",
   "title": "kDialog",
-  "version": "0.0.1-pre",
-  "description": "Simple jQuery dialog, made for drop jaws with awesome CSS & JS animations",
+  "version": "0.0.1-alpha",
+  "description": "A Facebook Friendly dialog, made to comply with awesome CSS & JS animations",
   "homepage": "",
   "dependencies": {},
   "devDependencies": {
