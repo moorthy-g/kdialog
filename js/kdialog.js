@@ -6,15 +6,15 @@
 	// Create the defaults once
 	var pluginName = "kdialog",
 		defaults = {
-			css: true,
-			modal: true,
-			actionHandlers: {},
-			wrapperClass: null,
-			position: ["auto","auto"], //null/integer/auto
-			beforeOpen: function(){},
-			beforeClose: function(){},
-			open: function(){},
-			close: function(){}
+			css: true, //if css animation
+			modal: true, //if overlay
+			actionHandlers: {}, //[data-action] handlers
+			wrapperClass: null, //class to add in wrapper
+			position: ["auto","auto"], //null/auto/integer
+			beforeOpen: function(){}, //invokes before css animation happens
+			beforeClose: function(){}, //invokes before css animation happens
+			open: function(){}, //invokes at end of css animation
+			close: function(){} //invokes at end of css animation
 		};
 
 	// The plugin constructor
@@ -30,8 +30,8 @@
 		//static variables
 		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, OVERLAY, EDGE_PADDING=20;
 
-		/*private & public methods*/
-		//returns special vendor prefixed property
+		/*private methods*/
+		//returns vendor prefixed property
 		var _getPrefixedProperty = function(prop) {
 			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
 
@@ -73,22 +73,24 @@
 
 		};
 
+		//handles facbook vertical placement
 		var _handleFBCanvasY = function(y) {
 			/* to place dialog in FB app by getting the visible area of the app canvas */
-			// no fixed headers in canvas page
+			/* note: no fixed header in canvas page*/
 			var _self=this, offsetY, visibleTop, visibleBtm, visibleArea, dialogHeight,
 			 documentHeight = document.documentElement.clientHeight;
-			// for tab page. coverHeight is the static space between bottom of navbar & starting of app iframe
+
+			/*note: for tab page, coverHeight is the static space from bottom of navbar to beginin of app iframe*/
 			var isTab, FBHeaders, coverHeight=389, PageAdminSpaceCorrection = 10;
 
 			window.FB.Canvas.getPageInfo(function(info) {
-				//wheather tab or canvas page
+				//wheather tab or canvas page (this is temproary, have to improve tab detection)
 				isTab = document.documentElement.clientWidth === 810;
 				//find fixed header space of tab page (it varies for user & admin)
 				FBHeaders = isTab?info.offsetTop-coverHeight:0; 
-				//do corrections (extra 10px added margin for admin)
+				//do corrections (extra **px added margin for admin)
 				FBHeaders -= FBHeaders>50?PageAdminSpaceCorrection:0;
-				//iframes' offset top in main window
+				//iframes' offset top related to main window
 				offsetY = info.offsetTop-info.scrollTop-FBHeaders; 
 				// the top most visible pixel of app canvas
 				visibleTop = offsetY<0?Math.abs(offsetY):0; 
@@ -133,7 +135,7 @@
 		 	_self.$wrapper = $dialog.parent(); 
 		 	$dialog.show();
 
-			/* tap any element that has [data-action=*], it performs the correspondent action handler
+			/* tap any element that has [data-action=*] within dialog, it performs the correspondent action handler
 			defined in plugin settings*/
 			_self.$wrapper.on("touchstart click", "[data-action]", function(e){
 				e.preventDefault();
@@ -145,19 +147,19 @@
 				}
 				
 			});
-			//no fancy css animations for old andriod
+			//no fancy css animations for old andriod even though it supports partial animation
 			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
 				_self.settings.css = false;
 
 		};
 
 		var open = function() {
-			// It has opened. so, return
+			// It has opened or the plugin is busy. so, return
 			if(this.isOpen || BUSY) return;
 
 			var _self = this, $dialog = $(_self.element), animations;
 
-			BUSY = true; //make the object busy
+			BUSY = true; //make the plugin busy
 			_self.isOpen = true; 
 			_self.settings.beforeOpen.call(_self); //callback
 			_self.$wrapper.show();
@@ -170,11 +172,11 @@
 			if(_self.settings.modal)
 				OVERLAY.fadeIn(200);
 
-			//go for css animation if css set to true & browser supports animation
+			//go for css animation if css set to true in options & browser supports animation
 			if(_self.settings.css && ANIM_END_EVENT) {
 				$dialog.addClass("in");
 				animations = ANIM_PREFIXED + "Name";
-				if($dialog.css(animations) != "none") { //if any css animation, perform.
+				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
 					$dialog.on(ANIM_END_EVENT, function() {
 						$dialog.off(ANIM_END_EVENT);
 						$dialog.removeClass("in");
@@ -192,7 +194,7 @@
 		};
 
 		var close = function() {
-			// nothing to close. so, return
+			// nothing to close or the plugin is busy. so, return
 			if(!this.isOpen || BUSY) return;
 
 			var _self = this, $dialog = $(_self.element), animations;
@@ -200,11 +202,11 @@
 			BUSY = true;
 			_self.settings.beforeClose.call(_self);
 
-			//go for css animation if css set to true & browser supports animation
+			//go for css animation if css set to true in options & browser supports animation
 			if(_self.settings.css  && ANIM_END_EVENT) { 
 				$dialog.addClass("out");
 				animations = ANIM_PREFIXED + "Name";
-				if($dialog.css(animations) != "none") { //if any css animation, perform.
+				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
 					$dialog.on(ANIM_END_EVENT, function() {
 						$dialog.off(ANIM_END_EVENT).removeClass("out");
 						_close.call(_self);
@@ -220,6 +222,7 @@
 		};
 
 		var position = function(x, y) {
+
 			//vertical placement
 			if(window.FB && window.FB.Canvas && y) { //handle placement in facebook canvas mode
 				_handleFBCanvasY.call(this, y);
@@ -258,10 +261,10 @@
 
 	}();
 
-	// plugin wrapper around the constructor,
+	// plugin wrapper around the constructor
 	$.fn[pluginName] = function(options) {
 		return this.each(function(){
-			if(! $.data(this, pluginName)) 
+			if(! $.data(this, pluginName))
 				$.data(this, pluginName, new KDialog(this, options));  //instance
 		});
 	};
