@@ -28,7 +28,7 @@
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, OVERLAY, EDGE_PADDING=20;
+		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, COUNT=0, $OVERLAY, EDGE_PADDING=20;
 
 		/*private methods*/
 		//returns vendor prefixed property
@@ -67,7 +67,7 @@
 
 			//hide modal
 			if(this.settings.modal)
-				OVERLAY.fadeOut(200);
+				$OVERLAY.fadeOut(200);
 
 			this.settings.close.call(this); //callback
 
@@ -125,9 +125,9 @@
 			var _self = this, $dialog = $(this.element);
 
 			// initiate overlay one time
-			if(_self.settings.modal && ! OVERLAY) {
-				OVERLAY = $("<div class='koverlay'></div>");
-				OVERLAY.insertBefore($dialog);
+			if(_self.settings.modal && ! $OVERLAY) {
+				$OVERLAY = $("<div class='koverlay'></div>");
+				$OVERLAY.insertBefore($dialog);
 			}
 
 		 	//create a dialog wrapper. add if any wrapper class
@@ -151,6 +151,11 @@
 			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
 				_self.settings.css = false;
 
+			//increase instance count
+			COUNT++;
+
+			console.log(COUNT);
+
 		};
 
 		var open = function() {
@@ -170,7 +175,7 @@
 
 			//show modal
 			if(_self.settings.modal)
-				OVERLAY.fadeIn(200);
+				$OVERLAY.fadeIn(200);
 
 			//go for css animation if css set to true in options & browser supports animation
 			if(_self.settings.css && ANIM_END_EVENT) {
@@ -248,11 +253,20 @@
 		var destroy = function() {
 			var _self = this;
 			//remove wrapper & hide dialog
-			$(this.element).unwrap().hide();
+			$(this.element).unwrap().hide()
+			.data(pluginName, null);
 			//remove events
 			_self.$wrapper.off("touchstart click");
-			//hide overlay
-			OVERLAY.hide();
+
+			//decrease instance count & remove overlay if no other dialog instance
+			if(--COUNT<1 && $OVERLAY) {
+				$OVERLAY.remove();
+				$OVERLAY = null;
+			} else if($OVERLAY) {//else just hide overlay
+				$OVERLAY.hide();
+			}
+
+			console.log($OVERLAY);
 		};
 
 		_initStaticScope();
