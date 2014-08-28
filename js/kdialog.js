@@ -73,7 +73,7 @@
 
 		};
 
-		//handles facbook vertical placement
+		//handles facebook vertical placement
 		var _handleFBCanvasY = function(y) {
 			/* to place dialog in FB app by getting the visible area of the app canvas */
 			/* note: no fixed header in canvas page*/
@@ -81,7 +81,7 @@
 			 documentHeight = document.documentElement.clientHeight;
 
 			/*note: for tab page, coverHeight is the static space from bottom of navbar to beginin of app iframe*/
-			var isTab, FBHeaders, coverHeight=389, PageAdminSpaceCorrection = 10;
+			var isTab, FBHeaders, fixedHeader = 50, coverHeight=389, PageAdminSpaceCorrection = 10;
 
 			window.FB.Canvas.getPageInfo(function(info) {
 				//wheather tab or canvas page (this is temproary, have to improve tab detection)
@@ -89,7 +89,7 @@
 				//find fixed header space of tab page (it varies for user & admin)
 				FBHeaders = isTab?info.offsetTop-coverHeight:0; 
 				//do corrections (extra **px added margin for admin)
-				FBHeaders -= FBHeaders>50?PageAdminSpaceCorrection:0;
+				FBHeaders -= FBHeaders>fixedHeader?PageAdminSpaceCorrection:0;
 				//iframes' offset top related to main window
 				offsetY = info.offsetTop-info.scrollTop-FBHeaders; 
 				// the top most visible pixel of app canvas
