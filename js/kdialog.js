@@ -223,6 +223,9 @@
 
 		var position = function(x, y) {
 
+			//do position, only if the dialog has opened
+			if(!this.isOpen) return;
+
 			//vertical placement
 			if(window.FB && window.FB.Canvas && y) { //handle placement in facebook canvas mode
 				_handleFBCanvasY.call(this, y);
