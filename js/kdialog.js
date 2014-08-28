@@ -49,7 +49,7 @@
 		var _initStaticScope = function() {
 			_animationPrefixed = _getPrefixedProperty("animation"),
 			_transitionPrefixed = _getPrefixedProperty("transition");
-			if(_animationPrefixed) {
+			if(_animationPrefixed) { //
 				_animationEndEvent = _animationPrefixed + (_animationPrefixed === "animation"?"end":"End");
 			};
 		};
@@ -130,7 +130,8 @@
 
 		 	//create a dialog wrapper. add if any wrapper class
 		 	$dialog.wrap("<div class='kwrapper"+(_self.settings.wrapperClass?" "+_self.settings.wrapperClass:"")+"'></div>");
-		 	_self.$wrapper = $dialog.parent();
+		 	_self.$wrapper = $dialog.parent(); 
+		 	$dialog.show();
 
 			/* tap any element that has [data-action=*], it performs the correspondent action handler
 			defined in plugin settings*/
@@ -239,7 +240,13 @@
 		};
 
 		var destroy = function() {
-			var _self = this, $dialog = $(_self.element);
+			var _self = this;
+			//remove wrapper & hide dialog
+			$(this.element).unwrap().hide();
+			//remove events
+			_self.$wrapper.off("touchstart click");
+			//hide overlay
+			_overlay.hide();
 		};
 
 		_initStaticScope();
