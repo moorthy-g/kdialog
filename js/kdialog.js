@@ -25,10 +25,10 @@
 		this.init();		
 	};
 
-	KDialog.prototype = function() { //anonymous scope, builds objects prototype
+	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var _busy = false, _animationPrefixed, _transitionPrefixed,	_animationEndEvent, _overlay, _edgePaddding=20;
+		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, OVERLAY, EDGE_PADDING=20;
 
 		/*private & public methods*/
 		//returns special vendor prefixed property
@@ -47,27 +47,27 @@
 
 		//set values to static variables
 		var _initStaticScope = function() {
-			_animationPrefixed = _getPrefixedProperty("animation"),
-			_transitionPrefixed = _getPrefixedProperty("transition");
-			if(_animationPrefixed) { //
-				_animationEndEvent = _animationPrefixed + (_animationPrefixed === "animation"?"end":"End");
+			ANIM_PREFIXED = _getPrefixedProperty("animation"),
+			TRANS_PREFIXED = _getPrefixedProperty("transition");
+			if(ANIM_PREFIXED) { //
+				ANIM_END_EVENT = ANIM_PREFIXED + (ANIM_PREFIXED === "animation"?"end":"End");
 			};
 		};
 
 		var _open = function() {
-			_busy = false;
+			BUSY = false;
 			this.settings.open.call(this); //callback
 		};
 
 		var _close = function() {
 			
 			this.$wrapper.hide();
-			_busy = false;
+			BUSY = false;
 			this.isOpen = false;
 
 			//hide modal
 			if(this.settings.modal)
-				_overlay.fadeOut(200);
+				OVERLAY.fadeOut(200);
 
 			this.settings.close.call(this); //callback
 
@@ -107,10 +107,10 @@
 						y = (visibleArea-dialogHeight)/2;
 					// don't allow dialog to exceed document height unless limited top
 					else if(visibleTop+dialogHeight>documentHeight)
-						y = visibleArea-dialogHeight-_edgePaddding;
+						y = visibleArea-dialogHeight-EDGE_PADDING;
 					// place it on top
 					else {
-						y = _edgePaddding;
+						y = EDGE_PADDING;
 					}
 				}
 
@@ -123,9 +123,9 @@
 			var _self = this, $dialog = $(this.element);
 
 			// initiate overlay one time
-			if(_self.settings.modal && ! _overlay) {
-				_overlay = $("<div class='koverlay'></div>");
-				_overlay.insertBefore($dialog);
+			if(_self.settings.modal && ! OVERLAY) {
+				OVERLAY = $("<div class='koverlay'></div>");
+				OVERLAY.insertBefore($dialog);
 			}
 
 		 	//create a dialog wrapper. add if any wrapper class
@@ -153,11 +153,11 @@
 
 		var open = function() {
 			// It has opened. so, return
-			if(this.isOpen || _busy) return;
+			if(this.isOpen || BUSY) return;
 
 			var _self = this, $dialog = $(_self.element), animations;
 
-			_busy = true; //make the object busy
+			BUSY = true; //make the object busy
 			_self.isOpen = true; 
 			_self.settings.beforeOpen.call(_self); //callback
 			_self.$wrapper.show();
@@ -168,15 +168,15 @@
 
 			//show modal
 			if(_self.settings.modal)
-				_overlay.fadeIn(200);
+				OVERLAY.fadeIn(200);
 
 			//go for css animation if css set to true & browser supports animation
-			if(_self.settings.css && _animationEndEvent) {
+			if(_self.settings.css && ANIM_END_EVENT) {
 				$dialog.addClass("in");
-				animations = _animationPrefixed + "Name";
+				animations = ANIM_PREFIXED + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation, perform.
-					$dialog.on(_animationEndEvent, function() {
-						$dialog.off(_animationEndEvent);
+					$dialog.on(ANIM_END_EVENT, function() {
+						$dialog.off(ANIM_END_EVENT);
 						$dialog.removeClass("in");
 						_open.call(_self);
 					});
@@ -193,20 +193,20 @@
 
 		var close = function() {
 			// nothing to close. so, return
-			if(!this.isOpen || _busy) return;
+			if(!this.isOpen || BUSY) return;
 
 			var _self = this, $dialog = $(_self.element), animations;
 
-			_busy = true;
+			BUSY = true;
 			_self.settings.beforeClose.call(_self);
 
 			//go for css animation if css set to true & browser supports animation
-			if(_self.settings.css  && _animationEndEvent) { 
+			if(_self.settings.css  && ANIM_END_EVENT) { 
 				$dialog.addClass("out");
-				animations = _animationPrefixed + "Name";
+				animations = ANIM_PREFIXED + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation, perform.
-					$dialog.on(_animationEndEvent, function() {
-						$dialog.off(_animationEndEvent).removeClass("out");
+					$dialog.on(ANIM_END_EVENT, function() {
+						$dialog.off(ANIM_END_EVENT).removeClass("out");
 						_close.call(_self);
 					});
 				} else { //else, degrade gracefully
@@ -226,7 +226,7 @@
 			} else if(y) { //handle placement in normal mode
 				if(y=="auto") {
 					y = (document.documentElement.clientHeight-this.$wrapper.height())/2;
-					y = y<_edgePaddding?_edgePaddding:y;
+					y = y<EDGE_PADDING?EDGE_PADDING:y;
 				} 
 				this.$wrapper.css("top", y+document.body.scrollTop);
 			}
@@ -246,7 +246,7 @@
 			//remove events
 			_self.$wrapper.off("touchstart click");
 			//hide overlay
-			_overlay.hide();
+			OVERLAY.hide();
 		};
 
 		_initStaticScope();
