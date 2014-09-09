@@ -20,6 +20,13 @@
 	&.out {
 		.animation(out 0.3s);
 	}
+	&.transition {
+		.transition(all 0.5s);
+	}
+	&.from {
+		opacity: 0;
+		.transform(scale(0.8));
+	}
 }
 .koverlay {
 	background: rgba(0,0,0,0.8);
@@ -42,6 +49,7 @@
 		margin-bottom: 10px;
 	}
 }
+
 
 // keyframes
 .keyframes(~"in, 0%{opacity:0; transform: rotateX(-100deg) translateY(400px) scale(0)}100%{opacity:1; transform: rotateX(0deg) translateY(0) scale(1);}");

@@ -6,7 +6,7 @@
 	// Create the defaults once
 	var pluginName = "kdialog",
 		defaults = {
-			css: true, //if css animation
+			css: "transition", //whether use animation/transition/null
 			modal: true, //if overlay
 			actionHandlers: {}, //[data-action] handlers
 			wrapperClass: null, //class to add in wrapper
@@ -28,7 +28,7 @@
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, COUNT=0, $OVERLAY, EDGE_PADDING=20;
+		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, TRANS_END_EVENT, COUNT=0, $OVERLAY, EDGE_PADDING=20;
 
 		/*private methods*/
 		//returns vendor prefixed property
@@ -49,9 +49,10 @@
 		var _initStaticScope = function() {
 			ANIM_PREFIXED = _getPrefixedProperty("animation"),
 			TRANS_PREFIXED = _getPrefixedProperty("transition");
-			if(ANIM_PREFIXED) { //
+			if(ANIM_PREFIXED) //
 				ANIM_END_EVENT = ANIM_PREFIXED + (ANIM_PREFIXED === "animation"?"end":"End");
-			};
+			if(TRANS_PREFIXED) 
+				TRANS_END_EVENT = TRANS_PREFIXED + (TRANS_PREFIXED === "transition"?"end":"End");
 		};
 
 		var _open = function() {
@@ -147,9 +148,10 @@
 				}
 				
 			});
-			//no fancy css animations for old andriod even though it supports partial animation
+			//no fancy css animations/transition for old andriod even though it supports partial animation
 			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
-				_self.settings.css = false;
+				_self.settings.css = null;
+			
 
 			//increase instance count
 			COUNT++;
@@ -177,8 +179,8 @@
 			if(_self.settings.modal)
 				$OVERLAY.fadeIn(200);
 
-			//go for css animation if css set to true in options & browser supports animation
-			if(_self.settings.css && ANIM_END_EVENT) {
+			//go for css animation if css set to animation in options & browser supports animation
+			if(_self.settings.css === "animation" && ANIM_END_EVENT) {
 				$dialog.addClass("in");
 				animations = ANIM_PREFIXED + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
@@ -192,7 +194,17 @@
 					_open.call(_self);
 				};
 			}
-			else { //if css set to false, go without css animation
+			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
+				$dialog.addClass("from");
+				setTimeout(function(){
+					$dialog.addClass("transition").removeClass("from");
+				});
+				$dialog.on(TRANS_END_EVENT, function() {
+					$dialog.off(TRANS_END_EVENT);
+					_open.call(_self);
+				});
+			}
+			else { //if animation set to false, go without css animation
 				_open.call(_self);
 			};
 
@@ -207,8 +219,8 @@
 			BUSY = true;
 			_self.settings.beforeClose.call(_self);
 
-			//go for css animation if css set to true in options & browser supports animation
-			if(_self.settings.css  && ANIM_END_EVENT) { 
+			//go for css animation if css set to animation in options & browser supports animation
+			if(_self.settings.css === "animation"  && ANIM_END_EVENT) { 
 				$dialog.addClass("out");
 				animations = ANIM_PREFIXED + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
@@ -220,7 +232,16 @@
 					$dialog.removeClass("out");
 					_close.call(_self);
 				}
-			} else { //if css set to false, go without css animation
+			}
+			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
+				$dialog.addClass("from");
+				$dialog.on(TRANS_END_EVENT, function() {
+					$dialog.off(TRANS_END_EVENT);
+					$dialog.removeClass("transition from");
+					_close.call(_self);
+				});
+			}
+			else { //if css set to false, go without css animation
 				_close.call(_self);
 			}
 
