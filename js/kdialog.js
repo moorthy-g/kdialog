@@ -158,8 +158,6 @@
 			//increase instance count
 			COUNT++;
 
-			console.log(COUNT);
-
 		};
 
 		var open = function(transitFrom, transitTo) {
@@ -201,7 +199,6 @@
 				$dialog.on(TRANS_END_EVENT, function() {
 					$dialog.off(TRANS_END_EVENT);
 					_open.call(_self);
-					console.log("transition open end");
 				});
 
 				if(transitFrom && transitTo) { //dynamic transition
@@ -261,8 +258,6 @@
 						_self.transitFrom = _self.transitTo = null;	
 					}
 
-					console.log("transition close end");
-
 					_close.call(_self);
 				});
 
@@ -317,8 +312,6 @@
 			} else if($OVERLAY) {//else just hide overlay
 				$OVERLAY.hide();
 			}
-
-			console.log($OVERLAY);
 		};
 
 		_initStaticScope();
