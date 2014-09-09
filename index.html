@@ -18,8 +18,22 @@
 			}).data("kdialog");
 
 			$("#kopen").click(function(e){
+				var x = e.pageX, y = e.pageY, w = 100, h = 100;
 				e.preventDefault();
-				kDialog.open();
+				kDialog.open(
+					{
+						"margin": -970,
+						"padding": 1000,
+						"opacity": 0,
+						"background-color": "blue"
+					},
+					{
+						"margin": 0,
+						"padding": 30,
+						"opacity": 1,
+						"background-color": ""
+					}
+				);
 			});
 		});
 	</script>

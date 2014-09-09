@@ -22,6 +22,8 @@
 		this.element = element;
 		this.isOpen = false;
 		this.settings = $.extend(defaults, options);
+		this.transitFrom = null;
+		this.transitTo = null;
 		this.init();		
 	};
 
@@ -160,7 +162,7 @@
 
 		};
 
-		var open = function() {
+		var open = function(transitFrom, transitTo) {
 			// It has opened or the plugin is busy. so, return
 			if(this.isOpen || BUSY) return;
 
@@ -195,14 +197,27 @@
 				};
 			}
 			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
-				$dialog.addClass("from");
-				setTimeout(function(){
-					$dialog.addClass("transition").removeClass("from");
-				});
+
 				$dialog.on(TRANS_END_EVENT, function() {
 					$dialog.off(TRANS_END_EVENT);
 					_open.call(_self);
+					console.log("transition open end");
 				});
+
+				if(transitFrom && transitTo) { //dynamic transition
+					_self.transitFrom = transitFrom;
+					_self.transitTo = transitTo;
+					$dialog.css(_self.transitFrom);
+					setTimeout(function(){
+						$dialog.addClass("transition").css(_self.transitTo);	
+					}, 10);
+				} else { //static transition
+					$dialog.addClass("from");
+					setTimeout(function(){
+						$dialog.addClass("transition").removeClass("from");
+					}, 10);
+				}
+
 			}
 			else { //if animation set to false, go without css animation
 				_open.call(_self);
@@ -234,12 +249,28 @@
 				}
 			}
 			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
-				$dialog.addClass("from");
+
 				$dialog.on(TRANS_END_EVENT, function() {
 					$dialog.off(TRANS_END_EVENT);
 					$dialog.removeClass("transition from");
+
+					if(_self.transitFrom) { //remove all dynamic properties used for transition
+						for(var prop in _self.transitFrom)
+							_self.transitFrom[prop] = ""
+						$dialog.css(_self.transitFrom);
+						_self.transitFrom = _self.transitTo = null;	
+					}
+
+					console.log("transition close end");
+
 					_close.call(_self);
 				});
+
+				if(_self.transitFrom) //dynamic transition
+					$dialog.css(_self.transitFrom);
+				else //static transition
+					$dialog.addClass("from");
+				
 			}
 			else { //if css set to false, go without css animation
 				_close.call(_self);
