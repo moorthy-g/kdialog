@@ -347,18 +347,22 @@
 		}; 
 
 		return this.each(function() {
+			var kdialog;
 			//init call
 			if(! $.data(this, pluginName))
 				$.data(this, pluginName, new KDialog(this, options)); //create & store instance
-
+			
+			kdialog = $.data(this, pluginName);
+			if(options) $.extend(kdialog.settings, options); //extend with new options
 			try { //command call
-				var kdialog = $.data(this, pluginName);
-				if(options) $.extend(kdialog.settings, options); //extend with new options
-				if(cmd) kdialog[cmd](); // invoke the command
-			} catch (err) {
+				if(cmd)
+					kdialog[cmd](); // invoke the command
+			} catch(err) {
 				if(window.console)
-					console.error("Invalid command : \""+cmd+"\"");
+					console.error("Invalid Command: " + cmd);
 			}
+				
+
 		});
 	};
 
