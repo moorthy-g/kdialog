@@ -77,6 +77,33 @@
 
 		};
 
+		//handle dialog placement
+		var _position = function() {
+
+			//do position, only if the dialog has opened
+			if(!this.isOpen) return;
+
+			var x = this.settings.position[0], y = this.settings.position[1];
+
+			//vertical placement
+			if(window.FB && window.FB.Canvas && y != null) { //handle placement in facebook canvas mode
+				_handleFBCanvasY.call(this, y);
+			} else if(y != null) { //handle placement in normal mode
+				if(y == "auto") {
+					y = (document.documentElement.clientHeight-this.$wrapper.height())/2;
+					y = y<EDGE_PADDING?EDGE_PADDING:y;
+				} 
+				this.$wrapper.css("top", y+document.body.scrollTop);
+			}
+
+			//horizontal placement
+			if(x != null){
+				x = x=="auto"?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
+				this.$wrapper.css("left", x+document.body.scrollLeft);
+			}
+			
+		};
+
 		//handles facebook vertical placement
 		var _handleFBCanvasY = function(y) {
 			/* to place dialog in FB app by getting the visible area of the app canvas */
@@ -174,7 +201,7 @@
 
 			//set position
 			if(_self.settings.position)
-				_self.position(this.settings.position[0], this.settings.position[1]);
+				_position.call(_self);
 
 			//show modal
 			if(_self.settings.modal)
@@ -280,30 +307,6 @@
 
 		};
 
-		var position = function(x, y) {
-
-			//do position, only if the dialog has opened
-			if(!this.isOpen) return;
-
-			//vertical placement
-			if(window.FB && window.FB.Canvas && y) { //handle placement in facebook canvas mode
-				_handleFBCanvasY.call(this, y);
-			} else if(y) { //handle placement in normal mode
-				if(y=="auto") {
-					y = (document.documentElement.clientHeight-this.$wrapper.height())/2;
-					y = y<EDGE_PADDING?EDGE_PADDING:y;
-				} 
-				this.$wrapper.css("top", y+document.body.scrollTop);
-			}
-
-			//horizontal placement
-			if(x){
-				x = x=="auto"?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
-				this.$wrapper.css("left", x+document.body.scrollLeft);
-			}
-			
-		};
-
 		var destroy = function() {
 			var _self = this;
 			//remove wrapper & hide dialog
@@ -325,7 +328,7 @@
 
 		//return public methods
 		return {
-			init: init,	open: open, close: close, position: position, destroy: destroy
+			init: init,	open: open, close: close, destroy: destroy
 		};
 
 	}();
