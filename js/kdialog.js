@@ -65,7 +65,8 @@
 
 		var _close = function() {
 			
-			this.$wrapper.hide();
+			//remove all inline styles
+			this.$wrapper.removeAttr("style");
 			BUSY = false;
 			this.isOpen = false;
 
