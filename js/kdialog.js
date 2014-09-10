@@ -196,12 +196,13 @@
 
 			BUSY = true; //make the plugin busy
 			_self.isOpen = true; 
-			_self.settings.beforeOpen.call(_self); //callback
 			_self.$wrapper.show();
 
 			//set position
 			if(_self.settings.position)
 				_position.call(_self);
+
+			_self.settings.beforeOpen.call(_self); //callback
 
 			//show modal
 			if(_self.settings.modal)
