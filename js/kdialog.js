@@ -5,12 +5,14 @@
 
 	// Create the defaults once
 	var pluginName = "kdialog",
-		defaults = {
+		defaults = { 
 			css: "transition", //whether use animation/transition/null
 			modal: true, //if overlay
 			actionHandlers: {}, //[data-action] handlers
 			wrapperClass: null, //class to add in wrapper
 			position: ["auto","auto"], //null/auto/integer
+			transitFrom: null, //object of animatable css properties
+			transitTo: null, //object of animatable css properties
 			beforeOpen: function(){}, //invokes before css animation happens
 			beforeClose: function(){}, //invokes before css animation happens
 			open: function(){}, //invokes at end of css animation
@@ -21,10 +23,9 @@
 	function KDialog(element, options) {
 		this.element = element;
 		this.isOpen = false;
-		this.settings = $.extend(defaults, options);
-		this.transitFrom = null;
-		this.transitTo = null;
+		this.settings = (typeof options === "object")?$.extend(defaults, options):defaults;
 		this.init();		
+		return this;	
 	};
 
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
@@ -160,7 +161,7 @@
 
 		};
 
-		var open = function(transitFrom, transitTo) {
+		var open = function() {
 			// It has opened or the plugin is busy. so, return
 			if(this.isOpen || BUSY) return;
 
@@ -196,17 +197,18 @@
 			}
 			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
 
+				var transitFrom = _self.settings.transitFrom, transitTo = _self.settings.transitTo;
+
 				$dialog.on(TRANS_END_EVENT, function() {
 					$dialog.off(TRANS_END_EVENT);
+					$dialog.removeClass("transition")
 					_open.call(_self);
 				});
 
 				if(transitFrom && transitTo) { //dynamic transition
-					_self.transitFrom = transitFrom;
-					_self.transitTo = transitTo;
-					$dialog.css(_self.transitFrom);
+					$dialog.css(transitFrom);
 					setTimeout(function(){
-						$dialog.addClass("transition").css(_self.transitTo);	
+						$dialog.addClass("transition").css(transitTo);	
 					}, 10);
 				} else { //static transition
 					$dialog.addClass("from");
@@ -247,22 +249,27 @@
 			}
 			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
 
+				var transitFrom = _self.settings.transitFrom, transitTo = _self.settings.transitTo;
+
 				$dialog.on(TRANS_END_EVENT, function() {
+					var toRemove = {};
+
 					$dialog.off(TRANS_END_EVENT);
 					$dialog.removeClass("transition from");
 
-					if(_self.transitFrom) { //remove all dynamic properties used for transition
-						for(var prop in _self.transitFrom)
-							_self.transitFrom[prop] = ""
-						$dialog.css(_self.transitFrom);
-						_self.transitFrom = _self.transitTo = null;	
+					if(transitTo) { //remove all dynamic properties used for transition
+						for(var prop in $.extend(transitFrom, transitTo))
+							toRemove[prop] = ""
+						$dialog.css(toRemove);
 					}
 
 					_close.call(_self);
 				});
 
-				if(_self.transitFrom) //dynamic transition
-					$dialog.css(_self.transitFrom);
+				$dialog.addClass("transition");
+
+				if(transitFrom) //dynamic transition
+					$dialog.css(transitFrom);
 				else //static transition
 					$dialog.addClass("from");
 				
@@ -324,10 +331,31 @@
 	}();
 
 	// plugin wrapper around the constructor
-	$.fn[pluginName] = function(options) {
-		return this.each(function(){
+	$.fn[pluginName] = function() {
+		
+		var cmd, options;
+
+		//organize arguments
+		for(var i = 0, arg; arg=arguments[i],i < 2; i++) {
+			if(typeof arg === "object")
+				options = arg;
+			else if(typeof arg === "string")
+				cmd = arg;
+		}; 
+
+		return this.each(function() {
+			//init call
 			if(! $.data(this, pluginName))
-				$.data(this, pluginName, new KDialog(this, options));  //instance
+				$.data(this, pluginName, new KDialog(this, options)); //create & store instance
+
+			try { //command call
+				var kdialog = $.data(this, pluginName);
+				if(options) $.extend(kdialog.settings, options); //extend with new options
+				if(cmd) kdialog[cmd](); // invoke the command
+			} catch (err) {
+				if(window.console)
+					console.error("Invalid command : \""+cmd+"\"");
+			}
 		});
 	};
 

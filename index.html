@@ -9,29 +9,32 @@
 	<script>
 		$(document).ready(function(){
 			
-			kDialog = $("#kdialog").kdialog({
+			$("#kdialog").kdialog({
 				actionHandlers: {
 					"move" : function(){
 						$(this.element).css("marginLeft", "+=100");
 					}
 				}
-			}).data("kdialog");
+			});
 
 			$("#kopen").click(function(e){
 				var x = e.pageX, y = e.pageY, w = 100, h = 100;
 				e.preventDefault();
-				kDialog.open(
+				$("#kdialog").kdialog(
+					"open",
 					{
-						"margin": -970,
-						"padding": 1000,
-						"opacity": 0,
-						"background-color": "blue"
-					},
-					{
-						"margin": 0,
-						"padding": 30,
-						"opacity": 1,
-						"background-color": ""
+						"transitFrom": {
+							"margin": -970,
+							"padding": 1000,
+							"opacity": 0,
+							"background-color": "blue"
+						},
+						"transitTo": {
+							"margin": 0,
+							"padding": 30,
+							"opacity": 1,
+							"background-color": ""
+						}
 					}
 				);
 			});
