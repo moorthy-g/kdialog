@@ -5,7 +5,7 @@
 
 	// Create the defaults once
 	var pluginName = "kdialog",
-		defaults = { 
+		defaults = {
 			css: "transition", //whether use animation/transition/null
 			modal: true, //if overlay
 			actionHandlers: {}, //[data-action] handlers
@@ -307,6 +307,11 @@
 
 		};
 
+		var refresh = function() { //refresh the dialog with latest settings
+			//position refresh
+			_position.call(this);
+		};
+
 		var destroy = function() {
 			var _self = this;
 			//remove wrapper & hide dialog
@@ -328,7 +333,7 @@
 
 		//return public methods
 		return {
-			init: init,	open: open, close: close, destroy: destroy
+			init: init,	open: open, close: close, refresh: refresh, destroy: destroy
 		};
 
 	}();
