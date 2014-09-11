@@ -6,7 +6,7 @@
 	// Create the defaults once
 	var pluginName = "kdialog",
 		defaults = {
-			css: "transition", //whether use animation/transition/null
+			css: "animation", //whether use animation/transition/null
 			modal: true, //if overlay
 			actionHandlers: {}, //[data-action] handlers
 			wrapperClass: null, //class to add in wrapper
