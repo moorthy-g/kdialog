@@ -286,11 +286,8 @@
 					$dialog.off(TRANS_END_EVENT);
 					$dialog.removeClass("transition from");
 
-					if(transitTo) { //remove all dynamic properties used for transition
-						for(var prop in $.extend(transitFrom, transitTo))
-							toRemove[prop] = ""
-						$dialog.css(toRemove);
-					}
+					if(transitFrom)
+						$dialog.removeAttr("style").show();
 
 					_close.call(_self);
 				});
