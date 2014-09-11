@@ -87,7 +87,7 @@
 			var x = this.settings.position[0], y = this.settings.position[1];
 
 			//vertical placement
-			if(window.Env.fb.mode == "canvas" && y != null) { //handle placement in facebook canvas mode
+			if(window.Env && window.Env.fb.mode == "canvas" && y != null) { //handle placement in facebook canvas mode
 				_handleFBCanvasY.call(this, y);
 			} else if(y != null) { //handle placement in normal mode
 				if(y == "auto") {
