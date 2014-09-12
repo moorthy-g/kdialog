@@ -23,7 +23,7 @@
 	function KDialog(element, options) {
 		this.element = element;
 		this.isOpen = false;
-		this.settings = (typeof options === "object")?$.extend(defaults, options):defaults;
+		this.settings = $.extend({}, defaults, options);
 		this.init();		
 		return this;	
 	};
