@@ -94,13 +94,14 @@
 					y = (document.documentElement.clientHeight-this.$wrapper.height())/2;
 					y = y<EDGE_PADDING?EDGE_PADDING:y;
 				} 
-				this.$wrapper.css("top", y+document.body.scrollTop);
+				//some browser(chrome) returns page scroll position in document.body.scrollTop
+				this.$wrapper.css("top", y+(document.documentElement.scrollTop||document.body.scrollTop));
 			}
 
 			//horizontal placement
 			if(x != null){
 				x = x=="auto"?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
-				this.$wrapper.css("left", x+document.body.scrollLeft);
+				this.$wrapper.css("left", x+(document.documentElement.scrollLeft||document.body.scrollLeft));
 			}
 			
 		};
