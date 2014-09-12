@@ -23,6 +23,7 @@
 	function KDialog(element, options) {
 		this.element = element;
 		this.isOpen = false;
+		this.busy = false;
 		this.settings = $.extend({}, defaults, options);
 		this.init();		
 		return this;	
@@ -31,7 +32,7 @@
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var BUSY = false, ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, TRANS_END_EVENT, COUNT=0, $OVERLAY, EDGE_PADDING=20;
+		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, TRANS_END_EVENT, COUNT=0, $OVERLAY, EDGE_PADDING=20;
 
 		/*private methods*/
 		//returns vendor prefixed property
@@ -59,7 +60,7 @@
 		};
 
 		var _open = function() {
-			BUSY = false;
+			this.busy = false;
 			this.settings.open.call(this); //callback
 		};
 
@@ -67,7 +68,7 @@
 			
 			//remove all inline styles
 			this.$wrapper.removeAttr("style");
-			BUSY = false;
+			this.busy = false;
 			this.isOpen = false;
 
 			//hide modal
@@ -192,11 +193,11 @@
 
 		var open = function() {
 			// It has opened or the plugin is busy. so, return
-			if(this.isOpen || BUSY) return;
+			if(this.isOpen || this.busy) return;
 
 			var _self = this, $dialog = $(_self.element), animations;
 
-			BUSY = true; //make the plugin busy
+			_self.busy = true; //make the plugin busy
 			_self.isOpen = true; 
 			_self.$wrapper.show();
 
@@ -256,11 +257,11 @@
 
 		var close = function() {
 			// nothing to close or the plugin is busy. so, return
-			if(!this.isOpen || BUSY) return;
+			if(!this.isOpen || this.busy) return;
 
 			var _self = this, $dialog = $(_self.element), animations;
 
-			BUSY = true;
+			_self.busy = true;
 			_self.settings.beforeClose.call(_self);
 
 			//go for css animation if css set to animation in options & browser supports animation
