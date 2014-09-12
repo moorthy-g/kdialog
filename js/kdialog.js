@@ -359,15 +359,8 @@
 			
 			kdialog = $.data(this, pluginName);
 			if(options) $.extend(kdialog.settings, options); //extend with new options
-			try { //command call
-				if(cmd)
-					kdialog[cmd](); // invoke the command
-			} catch(err) {
-				if(window.console)
-					console.error("Invalid Command: " + cmd);
-			}
-				
-
+			if(cmd && kdialog[cmd]) kdialog[cmd](); // invoke the command
+			
 		});
 	};
 
