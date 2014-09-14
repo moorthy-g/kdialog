@@ -6,26 +6,9 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" src="dist/kdialog.jquery.min.js"></script>
 	<link rel="stylesheet" href="style/kdialog.css">
-	<script>
-		$(document).ready(function(){
-			
-			kDialog = $("#kdialog").kdialog({
-				actionHandlers: {
-					"move" : function(){
-						$(this.element).css("marginLeft", "+=100");
-					}
-				}
-			}).data("kdialog");
-
-			$("#kopen").click(function(e){
-				e.preventDefault();
-				kDialog.open();
-			});
-		});
-	</script>
 </head>
 <body>
-	<p align="center">
+	<p align="center"> 
 		<a href="#" id="kopen">Open Dialog</a>
 	</p>
 	<div id="kdialog" class="kdialog">
@@ -36,5 +19,18 @@
 		<p>An Example for action handlers 
 			<a href="#" data-action="move">Move Dialog</a></p>
 	</div>
+	<div id="kdialog_2"></div>
+	<script type="text/javascript">
+	$("#kdialog").kdialog({
+					actionHandlers: {
+						"move": function() {
+							$("#kdialog").css("marginLeft", "+=100");
+						}
+					}
+				});
+		$("#kopen").click(function(){
+			$("#kdialog").kdialog("open");
+		})
+	</script>
 </body>
 </html>
