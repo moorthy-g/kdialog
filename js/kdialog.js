@@ -1,5 +1,14 @@
-//javascript document
-;(function($, window, document, undefined) {
+;(function(factory) {
+
+	if(typeof define === "function" && define.amd){
+		// AMD. Register as an anonymous module.
+		define(["jquery"], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+
+}(function($) {
 
 	'use strict';
 
@@ -18,6 +27,7 @@
 			open: function(){}, //invokes at end of css animation
 			close: function(){} //invokes at end of css animation
 		};
+
 
 	// The plugin constructor
 	function KDialog(element, options) {
@@ -365,4 +375,4 @@
 		});
 	};
 
-})(jQuery, window, document);
+}));

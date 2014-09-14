@@ -3,50 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kdialog</title>
-	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
-	<script type="text/javascript" src="js/kdialog.js"></script>
 	<link rel="stylesheet" href="style/kdialog.css">
-	<script>
-		$(document).ready(function(){
-			
-			$("#kdialog").kdialog({
-				actionHandlers: {
-					"move" : function(){
-						$(this.element).css("marginLeft", "+=100");
-					}
-				}
-			});
-
-			$("#kopen").click(function(e){
-				var x = e.pageX, y = e.pageY, w = 100, h = 100;
-				e.preventDefault();
-				$("#kdialog").kdialog(
-					"open",
-					{
-						"transitFrom": {
-							"margin": -970,
-							"padding": 1000,
-							"opacity": 0,
-							"background-color": "blue"
-						},
-						"transitTo": {
-							"margin": 0,
-							"padding": 30,
-							"opacity": 1,
-							"background-color": ""
-						}
-					}
-				);
-			});
-
-			window.onresize = function(){
-				$("#kdialog").kdialog("refresh");
-			}
-		});
-	</script>
+	<!-- <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="js/kdialog.js"></script> -->
+	<script data-main="js/kdialog.js" src="js/require.min.js"></script>
 </head>
 <body>
-	<p align="center">
+	<p align="center"> 
 		<a href="#" id="kopen">Open Dialog</a>
 	</p>
 	<div id="kdialog" class="kdialog">
@@ -57,5 +20,20 @@
 		<p>An Example for action handlers 
 			<a href="#" data-action="move">Move Dialog</a></p>
 	</div>
+	<div id="kdialog_2"></div>
+	<script type="text/javascript">
+		require.config({
+			 baseUrl: '',
+			 paths: {
+			 	jquery: 'js/jquery-1.11.0.min',
+			 	kdialog: 'js/kdialog',
+			 }
+		});
+		require(["kdialog"], function(){
+			$("#kopen").click(function(){
+				$("#kdialog").kdialog("open");
+			})
+		});
+	</script>
 </body>
 </html>
