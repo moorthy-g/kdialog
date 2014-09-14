@@ -186,8 +186,8 @@
 				var action = this.getAttribute("data-action");
 				if(action === "close") { //default close action handler
 					close.call(_self);	
-				} else {
-					_self.settings.actionHandlers[action].call(_self);
+				} else if(action = _self.settings.actionHandlers[action]) {
+					action.call(_self, e);
 				}
 				
 			});
