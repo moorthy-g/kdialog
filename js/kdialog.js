@@ -35,6 +35,7 @@
 		this.isOpen = false;
 		this.busy = false;
 		this.settings = $.extend({}, defaults, options);
+		this.id = 0;
 		this.init();		
 		return this;	
 	};
@@ -42,7 +43,7 @@
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, TRANS_END_EVENT, COUNT=0, $OVERLAY, EDGE_PADDING=20;
+		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, TRANS_END_EVENT, COUNT=0, $OVERLAY, MODAL=0, EDGE_PADDING=20;
 
 		/*private methods*/
 		//returns vendor prefixed property
@@ -81,8 +82,8 @@
 			this.busy = false;
 			this.isOpen = false;
 
-			//hide modal
-			if(this.settings.modal)
+			//hide modal && handle multiple modal dialogs 
+			if(this.settings.modal && --MODAL < 1)
 				$OVERLAY.fadeOut(200);
 
 			this.settings.close.call(this); //callback
@@ -218,8 +219,10 @@
 			_self.settings.beforeOpen.call(_self); //callback
 
 			//show modal
-			if(_self.settings.modal)
+			if(_self.settings.modal) {
+				MODAL++;
 				$OVERLAY.fadeIn(200);
+			}
 
 			//go for css animation if css set to animation in options & browser supports animation
 			if(_self.settings.css === "animation" && ANIM_END_EVENT) {

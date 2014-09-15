@@ -19,8 +19,12 @@
 		<a href="#" data-action="close">Close Dialog</a>
 		<p>An Example for action handlers 
 			<a href="#" data-action="move">Move Dialog</a></p>
+			<a href="#" data-action="new">new Dialog</a></p>
 	</div>
-	<div id="kdialog_2"></div>
+	<div id="kdialog_2" class="kdialog">
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean placerat magna vitae odio vehicula elementum. Suspendisse potenti. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce rhoncus sollicitudin ipsum, in pharetra urna condimentum nec. Ut ultricies risus sed mi consequat, eu varius nunc ornare. Ut rhoncus libero dignissim velit feugiat iaculis. Mauris ac nulla sed lectus luctus lacinia a vel mi. Fusce sagittis mi lectus, nec suscipit quam iaculis eget. Praesent eleifend varius quam, et pharetra quam.</p>
+		<a href="#" data-action="close">Close Dialog</a>
+	</div>
 	<script type="text/javascript">
 		require.config({
 			 baseUrl: '',
@@ -30,8 +34,22 @@
 			 }
 		});
 		require(["kdialog"], function(){
+			$("#kdialog_2").kdialog({
+				beforeOpen: function(){
+					$("#kdialog").kdialog("close");
+				},
+				beforeClose: function(){
+					$("#kdialog").kdialog("open");
+				}
+			});
 			$("#kopen").click(function(){
-				$("#kdialog").kdialog("open");
+				$("#kdialog").kdialog("open", {
+					"actionHandlers": {
+						"new": function() {
+							$("#kdialog_2").kdialog("open");
+						}
+					}
+				});
 			})
 		});
 	</script>
