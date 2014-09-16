@@ -20,6 +20,7 @@
 			actionHandlers: {}, //[data-action] handlers
 			wrapperClass: null, //class to add in wrapper
 			position: ["auto","auto"], //null/auto/integer
+			easyClose: false, //close on esc & close overlay tap
 			transitFrom: null, //object of animatable css properties
 			transitTo: null, //object of animatable css properties
 			beforeOpen: function(){}, //invokes before css animation happens
@@ -199,7 +200,7 @@
 			});
 
 			//increase instance count
-			COUNT++;
+			_self.id =  COUNT++;
 
 		};
 
@@ -267,6 +268,18 @@
 				_open.call(_self);
 			};
 
+			//easy close
+			if(_self.settings.easyClose) {
+				$(document).on("keyup.kdid"+_self.id, function(e){
+					//close on esc key press
+					e.which == 27 && close.call(_self);	
+				});
+				$OVERLAY.on("click.kdid"+_self.id, function(e){
+					//close on overlay click
+					close.call(_self);	
+				});
+			}
+
 		};
 
 		var close = function() {
@@ -277,6 +290,12 @@
 
 			_self.busy = true;
 			_self.settings.beforeClose.call(_self);
+
+			//easy close
+			if(_self.settings.easyClose) {
+				$(document).off("keyup.kdid"+_self.id);
+				$OVERLAY.off("click.kdid"+_self.id);
+			}
 
 			//go for css animation if css set to animation in options & browser supports animation
 			if(_self.settings.css === "animation"  && ANIM_END_EVENT) { 
@@ -334,8 +353,10 @@
 
 		var destroy = function() {
 			var _self = this;
+			//close
+			_self.close();
 			//remove wrapper & hide dialog
-			$(this.element).unwrap().hide()
+			$(_self.element).unwrap().hide()
 			.data(pluginName, null);
 			//remove events
 			_self.$wrapper.off("touchstart click");
