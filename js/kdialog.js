@@ -43,7 +43,9 @@
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, TRANS_END_EVENT, COUNT=0, $OVERLAY, MODAL=0, EDGE_PADDING=20;
+		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, 
+		TRANS_END_EVENT, COUNT=0, $OVERLAY, MODAL=0, EDGE_PADDING=20,
+		OLD_ANDROID = /android [1-2\.]/i.test(navigator.userAgent.toLowerCase());
 
 		/*private methods*/
 		//returns vendor prefixed property
@@ -175,6 +177,9 @@
 				$OVERLAY.insertBefore($dialog);
 			}
 
+			//no fancy css animations/transition for old andriod. because support is partial
+			if(OLD_ANDROID) this.settings.css = null;
+
 		 	//create a dialog wrapper. add if any wrapper class
 		 	$dialog.wrap("<div class='kwrapper"+(_self.settings.wrapperClass?" "+_self.settings.wrapperClass:"")+"'></div>");
 		 	_self.$wrapper = $dialog.parent(); 
@@ -192,10 +197,6 @@
 				}
 				
 			});
-			//no fancy css animations/transition for old andriod even though it supports partial animation
-			if(/android [1-2\.]/i.test(navigator.userAgent.toLowerCase()))
-				_self.settings.css = null;
-			
 
 			//increase instance count
 			COUNT++;
@@ -321,8 +322,13 @@
 
 		};
 
-		var refresh = function() { //refresh the dialog with latest settings
-			//position refresh
+		var refresh = function(options) { //refresh the dialog with given settings
+
+			options && $.extend(this.settings, options);
+			//no fancy css animations/transition for old andriod. because support is partial
+			if(OLD_ANDROID) this.settings.css = null;
+
+			//position, live refresh
 			_position.call(this);
 		};
 
@@ -366,14 +372,12 @@
 		}; 
 
 		return this.each(function() {
-			var kdialog;
-			//init call
-			if(! $.data(this, pluginName))
-				$.data(this, pluginName, new KDialog(this, options)); //create & store instance
-			
-			kdialog = $.data(this, pluginName);
-			if(options) $.extend(kdialog.settings, options); //extend with new options
-			if(cmd && kdialog[cmd]) kdialog[cmd](); // invoke the command
+			//get instance. if not initiated, create & get one
+			var kdialog = $.data(this, pluginName) || $.data(this, pluginName, new KDialog(this, options));
+			//extend with new settings
+			kdialog.refresh(options);
+			//invoke the command
+			cmd && cmd != "refresh" && (cmd = kdialog[cmd]) && cmd.call(kdialog);
 			
 		});
 	};
