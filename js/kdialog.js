@@ -111,12 +111,16 @@
 				} 
 				//some browser(chrome) returns page scroll position in document.body.scrollTop
 				this.$wrapper.css("top", y+(document.documentElement.scrollTop||document.body.scrollTop));
+			} else if(! this.busy) {
+				this.$wrapper.css("top","");
 			}
 
 			//horizontal placement
 			if(x != null){
 				x = x=="auto"?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
 				this.$wrapper.css("left", x+(document.documentElement.scrollLeft||document.body.scrollLeft));
+			} else if(! this.busy) {
+				this.$wrapper.css("left","");
 			}
 			
 		};
