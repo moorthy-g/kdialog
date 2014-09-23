@@ -178,9 +178,6 @@
 				$OVERLAY.insertBefore($dialog);
 			}
 
-			//no fancy css animations/transition for old andriod. because support is partial
-			if(OLD_ANDROID) this.settings.css = null;
-
 		 	//create a dialog wrapper. add if any wrapper class
 		 	$dialog.wrap("<div class='kwrapper"+(_self.settings.wrapperClass?" "+_self.settings.wrapperClass:"")+"'></div>");
 		 	_self.$wrapper = $dialog.parent(); 
@@ -210,7 +207,7 @@
 
 			var _self = this, $dialog = $(_self.element), animations;
 
-			_self.busy = true; //make the plugin busy
+			_self.busy = true;
 			_self.isOpen = true; 
 			_self.$wrapper.show();
 
@@ -227,7 +224,7 @@
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
-			if(_self.settings.css === "animation" && ANIM_END_EVENT) {
+			if(!OLD_ANDROID && _self.settings.css === "animation" && ANIM_END_EVENT) {
 				$dialog.addClass("in");
 				animations = ANIM_PREFIXED + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
@@ -241,7 +238,7 @@
 					_open.call(_self);
 				};
 			}
-			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
+			else if(!OLD_ANDROID && _self.settings.css === "transition" && TRANS_END_EVENT) {
 
 				var transitFrom = _self.settings.transitFrom, transitTo = _self.settings.transitTo;
 
@@ -298,7 +295,7 @@
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
-			if(_self.settings.css === "animation"  && ANIM_END_EVENT) { 
+			if(!OLD_ANDROID && _self.settings.css === "animation"  && ANIM_END_EVENT) { 
 				$dialog.addClass("out");
 				animations = ANIM_PREFIXED + "Name";
 				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
@@ -311,7 +308,7 @@
 					_close.call(_self);
 				}
 			}
-			else if(_self.settings.css === "transition" && TRANS_END_EVENT) {
+			else if(!OLD_ANDROID && _self.settings.css === "transition" && TRANS_END_EVENT) {
 
 				var transitFrom = _self.settings.transitFrom, transitTo = _self.settings.transitTo;
 
@@ -344,8 +341,6 @@
 		var refresh = function(options) { //refresh the dialog with given settings
 
 			options && $.extend(this.settings, options);
-			//no fancy css animations/transition for old andriod. because support is partial
-			if(OLD_ANDROID) this.settings.css = null;
 
 			//position, live refresh
 			_position.call(this);
