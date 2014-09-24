@@ -25,12 +25,16 @@ A Facebook Friendly dialog, made to comply with custom CSS & JS animations.
 - include `kdialog.css` or `kdialog.less`
 
 ### Usage
-`$(element).kdialog(*[options]*) //initiation`
-`$(element).kdialog(*command* *[, options]*) //initiation and/or action`
+
+`$(element).kdialog([options]) //initiation`
+
+`$(element).kdialog(command [, options]) //initiation and/or action`
 
 ### Instance Properties
-`element` refers to dialog element
-`isOpen` indicates current dialog status
+
+`element` refers to dialog element.
+
+`isOpen` indicates current dialog status.
 
 
 ### Options
@@ -57,7 +61,7 @@ You know the purpose very well :)
 #### actionHandlers (object)
 
 Action Handlers are to handle custom actions.
-If you add `data-action=*actionname*` in a html element inside dialog. Its corresponding handler fires as user click on that HTML element.
+If you add `data-action=[actionname]` in a html element inside dialog. Its corresponding handler fires as user click on that HTML element.
 
 
 ##### For Example:
@@ -73,9 +77,9 @@ actionHandlers: {
     }
 }
 ```
-These action handlers listens for `continue` & `cancel` actions. If a user clicks any element inside dialog with `data-action=continue` `data-action=cancel`, its corresponding handler fires 
+These action handlers listens for `continue` & `cancel` actions. If a user clicks any element inside dialog with `data-action="continue"` `data-action="cancel"`, its corresponding handler fires 
 
-> note: `data-action=”close”` is having a native handler. i.e if the user clicks any element with data-action="close", it closes the dialog
+> note: `data-action="close"` is having a native handler. i.e if the user clicks any element with data-action="close", it closes the dialog
 
 > note: Execution context would be always the instance.
 
@@ -102,7 +106,7 @@ It helps to create dynamic transitions for dialog. To make it work set `css: tra
 
 Object contains list of css property, value pairs. for ex:
 
-```
+```javascript
 transitFrom: {
     opacity: 0,
     width: 0
@@ -127,7 +131,7 @@ To know more about when these callbacks fires in runtime see execution flow
 
 ### Plugin Method Calls
 
-Methods can be invoked using the syntax `$element.kdialog(*command* *[, options]*)`
+Methods can be invoked using the syntax `$element.kdialog(command [, options])`
 
 command is a string to perform specific operation. 
 Valid commands in kDialog are `"open"`, `"close"`, `"refresh"`, `"destroy"`.
