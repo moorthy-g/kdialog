@@ -47,6 +47,10 @@
 					"actionHandlers": {
 						"new": function() {
 							$("#kdialog_2").kdialog("open");
+						},
+						"move": function() {
+							$(this.element).css("marginLeft", "+=20")
+							console.log(this);
 						}
 					}
 				});
