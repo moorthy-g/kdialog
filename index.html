@@ -3,9 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kdialog</title>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script type="text/javascript" src="dist/kdialog.jquery.min.js"></script>
 	<link rel="stylesheet" href="style/kdialog.css">
+	<script data-main="js/kdialog.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
 </head>
 <body>
 	<p align="center"> 
@@ -18,19 +17,43 @@
 		<a href="#" data-action="close">Close Dialog</a>
 		<p>An Example for action handlers 
 			<a href="#" data-action="move">Move Dialog</a></p>
+			<a href="#" data-action="new">new Dialog</a></p>
 	</div>
-	<div id="kdialog_2"></div>
+	<div id="kdialog_2" class="kdialog">
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean placerat magna vitae odio vehicula elementum. Suspendisse potenti. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce rhoncus sollicitudin ipsum, in pharetra urna condimentum nec. Ut ultricies risus sed mi consequat, eu varius nunc ornare. Ut rhoncus libero dignissim velit feugiat iaculis. Mauris ac nulla sed lectus luctus lacinia a vel mi. Fusce sagittis mi lectus, nec suscipit quam iaculis eget. Praesent eleifend varius quam, et pharetra quam.</p>
+		<a href="#" data-action="close">Close Dialog</a>
+	</div>
 	<script type="text/javascript">
-	$("#kdialog").kdialog({
-					actionHandlers: {
+		require.config({
+			 baseUrl: '',
+			 paths: {
+			 	jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min',
+			 	kdialog: 'dist/kdialog.jquery.min',
+			 }
+		});
+		require(["kdialog"], function(){
+			$("#kdialog_2").kdialog({
+				beforeOpen: function(){
+					$("#kdialog").kdialog("close");
+				},
+				beforeClose: function(){
+					$("#kdialog").kdialog("open");
+				}
+			});
+			$("#kopen").click(function(){
+				$("#kdialog").kdialog("open", {
+					"actionHandlers": {
+						"new": function() {
+							$("#kdialog_2").kdialog("open");
+						},
 						"move": function() {
-							$("#kdialog").css("marginLeft", "+=100");
+							$(this.element).css("marginLeft", "+=20")
+							console.log(this);
 						}
 					}
 				});
-		$("#kopen").click(function(){
-			$("#kdialog").kdialog("open");
-		})
+			})
+		});
 	</script>
 </body>
 </html>
