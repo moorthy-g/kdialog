@@ -46,9 +46,9 @@ List of few useful properties that the instance provides.
 
 - `element` refers dialog element.
 - `isOpen` indicates current dialog status.
+- `settings` an object holds current plugin options. you can view/modify options through this
 
-> note: Callbacks & Action handlers are excecutes in instance context, 
-> which means `this` keyword inside these handlers refers the current kdialog instance
+> note: Callbacks & Action handlers are excecutes in instance context, which means `this` keyword inside these handlers refers the current kdialog instance
 
 
 ### Options
@@ -61,7 +61,10 @@ whether to use css animation or transition or nothing
 
 If `animation`, class `in` will be added to dialog as it opens & class `out` will be added to dialog as it closes. We should use these classes to bind animations
 
-If `transition`,  class `from` will be added to dialog as it opens & the same class will be removed as it closes.
+If `transition`, use class `from` to determine the intial state for transition
+
+> Class `transition` will be added to dialog whenever it opens/closes. 
+> Transition details can be controlled using this class (delay, timing-function, ect...)
 
 > Note: Interested in dynamic transitions?? refer `transitFrom` , `transitTo` 
 
@@ -136,6 +139,9 @@ transitTo: {
 
 Dialog animates from `transitFrom` to `transitTo` as it opens
 and animates from `transitTo` to `transitFrom` as it closes
+
+> Class `transition` will be added to dialog whenever it opens/closes. 
+> Transition details (delay, timing-function, ect...) can be controlled using this class.
 
 
 #### beforeOpen/beforeClose/open/close
