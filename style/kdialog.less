@@ -1,42 +1,23 @@
 @import "lesshat";
 .kwrapper {
 	position: absolute;
-	top: 0;
-	left: 0;
 	z-index: 1000;
-	.perspective(500px);
 	display: none;
+	.perspective(500px);
 }
 .kdialog {
 	display: none;
-}
-.kdefault .kdialog {
-	background: #eee;
-	border: 1px solid #ddd;
-	font: 12px sans-serif;
-	width: 450px;
-	padding: 30px;
 	&.in {
-		.animation(in 0.5s);
+		.animation(in 0.4s);
 	}
 	&.out {
-		.animation(out 0.3s);
+		.animation(out 0.2s);
 	}
 	&.transition {
 		.transition(all 0.5s);
 	}
 	&.from {
 		opacity: 0;
-		.transform(scale(0.8));
-	}
-	h1 {
-		font-size: 18px;
-		margin-bottom: 10px;
-	}
-	p {
-		font-size: 13px;
-		color: #666;
-		margin-bottom: 10px;
 	}
 }
 .koverlay {
@@ -49,7 +30,24 @@
 	z-index: 999;
 	display: none;
 }
+//default theme
+.kdefault .kdialog {
+	background: #eee;
+	border: 1px solid #ddd;
+	font: 12px sans-serif;
+	width: 450px;
+	padding: 30px;
+	h1 {
+		font-size: 18px;
+		margin-bottom: 10px;
+	}
+	p {
+		font-size: 13px;
+		color: #666;
+		margin-bottom: 10px;
+	}
+}
 
 // keyframes
-.keyframes(~"in, 0%{opacity:0; transform: rotateY(-100deg) scale(0)}100%{opacity:1; transform: rotateY(0deg) scale(1);}");
-.keyframes(~"out, 0%{opacity:1; transform: rotateY(0deg) translateY(0) scale(1)}100%{opacity:0;transform: rotateY(100deg) scale(0.4)}");
+.keyframes(~"in, 0%{opacity:0; transform: scale(0.9)}100%{opacity:1; transform: scale(1)}");
+.keyframes(~"out, 0%{opacity:1; transform: scale(1);}100%{opacity:0; transform: scale(0.9)}");
