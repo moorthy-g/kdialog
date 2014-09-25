@@ -23,9 +23,10 @@ module.exports = function(grunt) {
 				options: {
 					cleancss: true
 				},
-				files: {	
-						"style/kdialog.css" : "style/kdialog.less"
-				 	}
+				files: {
+					"style/kdialog.css" : "style/kdialog.less",
+					"dist/kdialog.css" : "style/kdialog.less",
+			 	}
 			 }
 		}
 	});
