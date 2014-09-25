@@ -1,0 +1,64 @@
+html, body {
+	overflow: hidden;
+	font: 13px helvetica, arial, san-serif;
+}
+ol {
+	font: 13px/20px helvetica, arial, san-serif;
+	color: #000;
+	list-style: none;
+	margin: 50px;
+	padding: 0;
+}
+ol li {
+	border-bottom: 1px solid #eee;
+}
+ol a {
+	display: block;
+	color: #999;
+	text-decoration: none;
+	padding: 10px 20px;
+}
+ol a:hover {
+	background: #eee;
+}
+#kopen {
+	background: #eee;
+	color: #333;
+	text-decoration: none;
+	display: inline-block;
+	padding: 10px 50px;
+}
+#kopen:hover {
+	background: #ddd;
+}
+
+
+.kdialog.vibrate {
+	-webkit-animation: vibrate 0.02s alternate 10;
+}
+
+
+@-webkit-keyframes vibrate {
+	0% {
+		-webkit-transform: translate(0, 0);
+	}
+	100% {
+		-webkit-transform: translate(10px, 10px);
+	}
+}
+@-moz-keyframes vibrate {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(10px, 10px);
+	}
+}
+@keyframes vibrate {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(10px, 10px);
+	}
+}
