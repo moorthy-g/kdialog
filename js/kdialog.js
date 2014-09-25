@@ -18,7 +18,7 @@
 			css: "animation", //whether use animation/transition/null
 			modal: true, //if overlay
 			actionHandlers: {}, //[data-action] handlers
-			wrapperClass: null, //class to add in wrapper
+			wrapperClass: "kdefault", //class to add in wrapper
 			position: ["auto","auto"], //null/auto/integer
 			easyClose: false, //close on esc & close overlay tap
 			transitFrom: null, //object of animatable css properties

@@ -8,12 +8,14 @@
 	display: none;
 }
 .kdialog {
+	display: none;
+}
+.kdefault .kdialog {
 	background: #eee;
 	border: 1px solid #ddd;
 	font: 12px sans-serif;
 	width: 450px;
 	padding: 30px;
-	display: none;
 	&.in {
 		.animation(in 0.5s);
 	}
@@ -27,6 +29,15 @@
 		opacity: 0;
 		.transform(scale(0.8));
 	}
+	h1 {
+		font-size: 18px;
+		margin-bottom: 10px;
+	}
+	p {
+		font-size: 13px;
+		color: #666;
+		margin-bottom: 10px;
+	}
 }
 .koverlay {
 	background: rgba(0,0,0,0.8);
@@ -38,18 +49,6 @@
 	z-index: 999;
 	display: none;
 }
-.kdialog {
-	h1 {
-		font-size: 18px;
-		margin-bottom: 10px;
-	}
-	p {
-		font-size: 13px;
-		color: #666;
-		margin-bottom: 10px;
-	}
-}
-
 
 // keyframes
 .keyframes(~"in, 0%{opacity:0; transform: rotateY(-100deg) scale(0)}100%{opacity:1; transform: rotateY(0deg) scale(1);}");

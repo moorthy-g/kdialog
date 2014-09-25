@@ -85,7 +85,9 @@ These action handlers listens for `continue` & `cancel` actions. If a user click
 
 
 #### wrapperClass (string)
-Adds a class to the wrapper of the dialog
+`Default: "kdefault"`
+Adds a class to the wrapper of the dialog. 
+> note: Its must to change the default value to create your own customized dialog
 
 
 #### position [("auto"|integer|null), ("auto"|integer|null)]
