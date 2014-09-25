@@ -35,6 +35,8 @@ ol a:hover {
 
 .kdialog.vibrate {
 	-webkit-animation: vibrate 0.02s alternate 10;
+	-moz-animation: vibrate 0.02s alternate 10;
+	animation: vibrate 0.02s alternate 10;
 }
 
 
@@ -48,10 +50,10 @@ ol a:hover {
 }
 @-moz-keyframes vibrate {
 	0% {
-		transform: translate(0, 0);
+		-moz-transform: translate(0, 0);
 	}
 	100% {
-		transform: translate(10px, 10px);
+		-moz-transform: translate(10px, 10px);
 	}
 }
 @keyframes vibrate {
