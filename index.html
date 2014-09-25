@@ -3,57 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kdialog</title>
-	<link rel="stylesheet" href="dist/kdialog.css">
-	<script data-main="js/kdialog.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+	<script type="text/javascript">
+		window.location = "demo"
+	</script>
 </head>
 <body>
-	<p align="center"> 
-		<a href="#" id="kopen">Open Dialog</a>
-	</p>
-	<div id="kdialog" class="kdialog">
-		<h1>Pourquoi cette autorisation</h1>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean placerat magna vitae odio vehicula elementum. Suspendisse potenti. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce rhoncus sollicitudin ipsum, in pharetra urna condimentum nec. Ut ultricies risus sed mi consequat, eu varius nunc ornare. Ut rhoncus libero dignissim velit feugiat iaculis. Mauris ac nulla sed lectus luctus lacinia a vel mi. Fusce sagittis mi lectus, nec suscipit quam iaculis eget. Praesent eleifend varius quam, et pharetra quam.</p>
-		<p>Donec ultrices venenatis arcu ut pulvinar. Ut pellentesque magna a euismod tincidunt. Vivamus ut diam et justo sodales molestie. Donec ornare laoreet sem a dictum. Sed sem ante, vestibulum vitae tincidunt ac, sollicitudin et elit. Nullam vel dui id tortor rhoncus ultricies vitae volutpat magna. Nulla mattis mauris sit amet dui imperdiet, ac dignissim metus dictum. Morbi id pellentesque mi, ut ultrices tortor. Nam hendrerit venenatis est, eu lacinia odio blandit aliquet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris dolor lacus, dictum vitae hendrerit eget, sodales sed massa. Sed aliquam velit ac ligula sodales imperdiet. Pellentesque sit amet eros laoreet, cursus diam id, feugiat diam. Duis nec laoreet nisl. Integer gravida, nisl vel luctus facilisis, ipsum neque posuere lorem, et posuere magna urna et neque. Nulla tempus eleifend lorem, id egestas tortor.</p>
-		<a href="#" data-action="close">Close Dialog</a>
-		<p>An Example for action handlers 
-			<a href="#" data-action="move">Move Dialog</a></p>
-			<a href="#" data-action="new">new Dialog</a></p>
-	</div>
-	<div id="kdialog_2" class="kdialog">
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean placerat magna vitae odio vehicula elementum. Suspendisse potenti. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce rhoncus sollicitudin ipsum, in pharetra urna condimentum nec. Ut ultricies risus sed mi consequat, eu varius nunc ornare. Ut rhoncus libero dignissim velit feugiat iaculis. Mauris ac nulla sed lectus luctus lacinia a vel mi. Fusce sagittis mi lectus, nec suscipit quam iaculis eget. Praesent eleifend varius quam, et pharetra quam.</p>
-		<a href="#" data-action="close">Close Dialog</a>
-	</div>
-	<script type="text/javascript">
-		require.config({
-			 baseUrl: '',
-			 paths: {
-			 	jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min',
-			 	kdialog: 'dist/kdialog.jquery.min',
-			 }
-		});
-		require(["kdialog"], function(){
-			$("#kdialog_2").kdialog({
-				beforeOpen: function(){
-					$("#kdialog").kdialog("close");
-				},
-				beforeClose: function(){
-					$("#kdialog").kdialog("open");
-				}
-			});
-			$("#kopen").click(function(){
-				$("#kdialog").kdialog("open", {
-					"actionHandlers": {
-						"new": function() {
-							$("#kdialog_2").kdialog("open");
-						},
-						"move": function() {
-							$(this.element).css("marginLeft", "+=20")
-							console.log(this);
-						}
-					}
-				});
-			})
-		});
-	</script>
+
 </body>
 </html>
