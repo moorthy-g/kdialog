@@ -344,10 +344,21 @@
 
 		var refresh = function(options) { //refresh the dialog with given settings
 
-			options && $.extend(this.settings, options);
+			var settings = this.settings;
+
+			if(options) {
+
+				//refresh wrapperClass, incase any change
+				options.wrapperClass && options.wrapperClass !== settings.wrapperClass &&
+				this.$wrapper.removeClass(settings.wrapperClass).addClass(options.wrapperClass);
+
+				//extend with current settings
+				$.extend(settings, options);
+			}
 
 			//position, live refresh
 			_position.call(this);
+
 		};
 
 		var destroy = function() {
