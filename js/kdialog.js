@@ -33,22 +33,22 @@
 	// The plugin constructor
 	function KDialog(element, options) {
 		this.element = element;
+		this.wrapper = null;
 		this.isOpen = false;
 		this.busy = false;
 		this.settings = $.extend({}, defaults, options);
 		this.id = 0;
-		this.init();		
-		return this;	
+		this.init();	
 	};
 
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
 		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, 
-		TRANS_END_EVENT, COUNT=0, $OVERLAY, MODAL=0, EDGE_PADDING=20,
+		TRANS_END_EVENT, COUNT=0, OVERLAY, MODAL=0, EDGE_PADDING=20,
 		OLD_ANDROID = /android [1-2\.]/i.test(navigator.userAgent.toLowerCase());
 
-		/*private methods*/
+		/*private methods -- kindof*/
 		//returns vendor prefixed property
 		var _getPrefixedProperty = function(prop) {
 			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
@@ -81,13 +81,13 @@
 		var _close = function() {
 			
 			//remove all inline styles
-			this.$wrapper.removeAttr("style");
+			this.wrapper.removeAttribute("style");
 			this.busy = false;
 			this.isOpen = false;
 
 			//hide modal && handle multiple modal dialogs 
 			if(this.settings.modal && --MODAL < 1)
-				$OVERLAY.fadeOut(200);
+				$(OVERLAY).fadeOut(200);
 
 			this.settings.close.call(this); //callback
 
@@ -99,28 +99,28 @@
 			//do position, only if the dialog has opened
 			if(!this.isOpen) return;
 
-			var x = this.settings.position[0], y = this.settings.position[1];
+			var x = this.settings.position[0], y = this.settings.position[1], wrapper = this.wrapper;
 
 			//vertical placement
 			if(window.Env && window.Env.fb.mode == "canvas" && y != null) { //handle placement in facebook canvas mode
 				_handleFBCanvasY.call(this, y);
 			} else if(y != null) { //handle placement in normal mode
 				if(y == "auto") {
-					y = (document.documentElement.clientHeight-this.$wrapper.height())/2;
+					y = (document.documentElement.clientHeight-wrapper.clientHeight)/2;
 					y = y<EDGE_PADDING?EDGE_PADDING:y;
 				} 
 				//some browser(chrome) returns page scroll position in document.body.scrollTop
-				this.$wrapper.css("top", y+(document.documentElement.scrollTop||document.body.scrollTop));
+				wrapper.style.top = y+(document.documentElement.scrollTop||document.body.scrollTop)+"px";
 			} else if(! this.busy) {
-				this.$wrapper.css("top","");
+				wrapper.style.top = "";
 			}
 
 			//horizontal placement
-			if(x != null){
-				x = x=="auto"?(document.documentElement.clientWidth-this.$wrapper.width())/2:x;
-				this.$wrapper.css("left", x+(document.documentElement.scrollLeft||document.body.scrollLeft));
+			if(x != null) {
+				x = x=="auto"?(document.documentElement.clientWidth-wrapper.clientWidth)/2:x;
+				wrapper.style.left = x+(document.documentElement.scrollLeft||document.body.scrollLeft)+"px";
 			} else if(! this.busy) {
-				this.$wrapper.css("left","");
+				wrapper.style.left = "";
 			}
 			
 		};
@@ -130,7 +130,7 @@
 			/* to place dialog in FB app by getting the visible area of the app canvas */
 			/* note: no fixed header in canvas page*/
 			var _self=this, offsetY, visibleTop, visibleBtm, visibleArea, dialogHeight,
-			 documentHeight = document.documentElement.clientHeight;
+			 documentHeight = document.documentElement.clientHeight, wrapper = this.wrapper;
 
 			/*note: for tab page, coverHeight is the static space from bottom of navbar to beginin of app iframe*/
 			var isTab, FBHeaders, fixedHeader = 50, coverHeight=389, PageAdminSpaceCorrection = 10;
@@ -154,7 +154,7 @@
 
 				if(y=="auto") {
 					visibleArea = visibleBtm-visibleTop;
-					dialogHeight = _self.$wrapper.height();
+					dialogHeight = wrapper.clientHeight;
 
 					// if enough space, place it center
 					if(visibleArea>=dialogHeight)
@@ -168,31 +168,35 @@
 					}
 				}
 
-				_self.$wrapper.css("top", y+visibleTop);
+				wrapper.style.top = y+visibleTop+"px";
 
 			});
 		};
 
 		var init = function() {
-			var _self = this, $dialog = $(this.element);
+			var _self = this, dialog = this.element, wrapper;
 
-			//make dialog, a direct child of "body"
-			$("body").append($dialog);
+			
 
 			// initiate overlay one time
-			if(_self.settings.modal && ! $OVERLAY) {
-				$OVERLAY = $("<div class='koverlay'></div>");
-				$OVERLAY.insertBefore($dialog);
+			if(_self.settings.modal && ! OVERLAY) {
+				OVERLAY = document.createElement("div");
+				OVERLAY.className = "koverlay";
+				document.body.appendChild(OVERLAY);
 			}
 
-		 	//create a dialog wrapper. add if any wrapper class
-		 	$dialog.wrap("<div class='kwrapper"+(_self.settings.wrapperClass?" "+_self.settings.wrapperClass:"")+"'></div>");
-		 	_self.$wrapper = $dialog.parent(); 
-		 	$dialog.show();
+		 	//create a dialog wrapper. add wrapper class, if any
+		 	wrapper = this.wrapper = document.createElement("div");
+		 	wrapper.className = "kwrapper "+ (_self.settings.wrapperClass||"kdefault");
+		 	wrapper.appendChild(dialog);
+
+		 	//make it, a direct child of "body"
+			document.body.appendChild(wrapper);
+			dialog.style.display = "block";
 
 			/* tap any element that has [data-action=*] within dialog, it performs the correspondent action handler
 			defined in plugin settings*/
-			_self.$wrapper.on("touchstart click", "[data-action]", function(e){
+			$(wrapper).on("click", "[data-action]", function(e){
 				e.preventDefault();
 				var action = this.getAttribute("data-action");
 				if(action === "close") { //default close action handler
@@ -206,17 +210,19 @@
 			//increase instance count
 			_self.id =  COUNT++;
 
+			console.log("init");
+
 		};
 
 		var open = function() {
 			// It has opened or the plugin is busy. so, return
 			if(this.isOpen || this.busy) return;
 
-			var _self = this, $dialog = $(_self.element), animations;
+			var _self = this, dialog = this.element, $dialog = $(dialog), animations;
 
 			_self.busy = true;
 			_self.isOpen = true; 
-			_self.$wrapper.show();
+			_self.wrapper.style.display = "block";
 
 			//set position
 			if(_self.settings.position)
@@ -227,14 +233,14 @@
 			//show modal
 			if(_self.settings.modal) {
 				MODAL++;
-				$OVERLAY.fadeIn(200);
+				$(OVERLAY).fadeIn(200);
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
 			if(!OLD_ANDROID && _self.settings.css === "animation" && ANIM_END_EVENT) {
 				$dialog.addClass("in");
 				animations = ANIM_PREFIXED + "Name";
-				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
+				if(dialog.style[animations] != "none") { //if any css animation to play, handle end event.
 					$dialog.on(ANIM_END_EVENT, function() {
 						$dialog.off(ANIM_END_EVENT);
 						$dialog.removeClass("in");
@@ -278,7 +284,7 @@
 					//close on esc key press
 					e.which == 27 && close.call(_self);	
 				});
-				$OVERLAY && $OVERLAY.on("click.kdid"+_self.id, function(e){
+				OVERLAY && $(OVERLAY).on("click.kdid"+_self.id, function(e){
 					//close on overlay click
 					close.call(_self);	
 				});
@@ -290,7 +296,7 @@
 			// nothing to close or the plugin is busy. so, return
 			if(!this.isOpen || this.busy) return;
 
-			var _self = this, $dialog = $(_self.element), animations;
+			var _self = this, dialog = this.element, $dialog = $(dialog), animations;
 
 			_self.busy = true;
 			_self.settings.beforeClose.call(_self);
@@ -298,14 +304,14 @@
 			//easy close
 			if(_self.settings.easyClose) {
 				$(document).off("keyup.kdid"+_self.id);
-				$OVERLAY && $OVERLAY.off("click.kdid"+_self.id);
+				OVERLAY && $(OVERLAY).off("click.kdid"+_self.id);
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
 			if(!OLD_ANDROID && _self.settings.css === "animation"  && ANIM_END_EVENT) { 
 				$dialog.addClass("out");
 				animations = ANIM_PREFIXED + "Name";
-				if($dialog.css(animations) != "none") { //if any css animation to play, handle end event.
+				if(dialog.style[animations] != "none") { //if any css animation to play, handle end event.
 					$dialog.on(ANIM_END_EVENT, function() {
 						$dialog.off(ANIM_END_EVENT).removeClass("out");
 						_close.call(_self);
@@ -325,8 +331,10 @@
 					$dialog.off(TRANS_END_EVENT);
 					$dialog.removeClass("transition from");
 
-					if(transitFrom)
-						$dialog.removeAttr("style").show();
+					if(transitFrom) {
+						dialog.removeAttribute("style")
+						dialog.style.display = "block";
+					}
 
 					_close.call(_self);
 				});
@@ -347,14 +355,11 @@
 
 		var refresh = function(options) { //refresh the dialog with given settings
 
-			var settings = this.settings;
+			var settings = this.settings, wrapper = this.wrapper;
 
 			if(options) {
-
 				//refresh wrapperClass, incase any change
-				options.wrapperClass && options.wrapperClass !== settings.wrapperClass &&
-				this.$wrapper.removeClass(settings.wrapperClass).addClass(options.wrapperClass);
-
+				wrapper && (wrapper.className = "kwrapper "+ (this.settings.wrapperClass||"kdefault"));
 				//extend with current settings
 				$.extend(settings, options);
 			}
@@ -362,23 +367,25 @@
 			//position, live refresh
 			_position.call(this);
 
+			console.log("refresh");
+
 		};
 
 		var destroy = function() {
-			var _self = this;
-			
+			var _self = this, wrapper = this.wrapper;
+
 			//close
 			_self.close();
 
 			//remove dialog from DOM
-			_self.$wrapper.remove();
+			wrapper.parentNode.removeChild(wrapper);
 
 			//decrease instance count & remove overlay if no other dialog instance
-			if(--COUNT<1 && $OVERLAY) {
-				$OVERLAY.remove();
-				$OVERLAY = null;
-			} else if($OVERLAY) {//else just hide overlay
-				$OVERLAY.hide();
+			if(--COUNT<1 && OVERLAY) {
+				OVERLAY.parentNode.removeChild(OVERLAY);
+				OVERLAY = null;
+			} else if(OVERLAY) {//else just hide overlay
+				OVERLAY.style.display = "none";
 			}
 		};
 
@@ -405,10 +412,12 @@
 		}; 
 
 		return this.each(function() {
-			//get instance. if not initiated, create & get one
-			var kdialog = $.data(this, pluginName) || $.data(this, pluginName, new KDialog(this, options));
-			//extend with new settings
-			kdialog.refresh(options);
+			var kdialog = $.data(this, pluginName);
+			if(! kdialog ) //if instance not initiated, create one
+				kdialog = $.data(this, pluginName, new KDialog(this, options))
+			else //if already initiated, refresh
+				kdialog.refresh(options);
+			
 			//invoke the command
 			cmd && cmd != "refresh" && (cmd = kdialog[cmd]) && cmd.call(kdialog);
 			
