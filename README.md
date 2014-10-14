@@ -195,8 +195,8 @@ This section isn't very important. But, It might help you to understand the plug
 
 ##### **Execution Flow: destroy**
 1. Runs through close flow (If instance is open)
-2. Removes the wrapper
-3. Destroy reference & events
+2. Whipe out the entire dialog from DOM
+3. If no other kdialog instance in DOM, remove the overlay
 
 ```
 Good luck & happy coding :)

@@ -366,13 +366,12 @@
 
 		var destroy = function() {
 			var _self = this;
+			
 			//close
 			_self.close();
-			//remove wrapper & hide dialog
-			$(_self.element).unwrap().hide()
-			.data(pluginName, null);
-			//remove events
-			_self.$wrapper.off("touchstart click");
+
+			//remove dialog from DOM
+			_self.$wrapper.remove();
 
 			//decrease instance count & remove overlay if no other dialog instance
 			if(--COUNT<1 && $OVERLAY) {
