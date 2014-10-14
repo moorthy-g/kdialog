@@ -176,6 +176,9 @@
 		var init = function() {
 			var _self = this, $dialog = $(this.element);
 
+			//make dialog, a direct child of "body"
+			$("body").append($dialog);
+
 			// initiate overlay one time
 			if(_self.settings.modal && ! $OVERLAY) {
 				$OVERLAY = $("<div class='koverlay'></div>");
@@ -275,7 +278,7 @@
 					//close on esc key press
 					e.which == 27 && close.call(_self);	
 				});
-				$OVERLAY.on("click.kdid"+_self.id, function(e){
+				$OVERLAY && $OVERLAY.on("click.kdid"+_self.id, function(e){
 					//close on overlay click
 					close.call(_self);	
 				});
@@ -295,7 +298,7 @@
 			//easy close
 			if(_self.settings.easyClose) {
 				$(document).off("keyup.kdid"+_self.id);
-				$OVERLAY.off("click.kdid"+_self.id);
+				$OVERLAY && $OVERLAY.off("click.kdid"+_self.id);
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
