@@ -353,19 +353,19 @@
 
 		};
 
-		var refresh = function(options) { //refresh the dialog with given settings
+		var refresh = function(options, cmd) { //refresh the dialog with given settings
 
 			var settings = this.settings, wrapper = this.wrapper;
 
 			if(options) {
-				//refresh wrapperClass, incase any change
-				wrapper && (wrapper.className = "kwrapper "+ (this.settings.wrapperClass||"kdefault"));
 				//extend with current settings
 				$.extend(settings, options);
+				//refresh wrapperClass, incase any change
+				wrapper && (wrapper.className = "kwrapper "+ (settings.wrapperClass||"kdefault"));
 			}
 
-			//position, live refresh
-			_position.call(this);
+			//reposition, unless "close" command
+			cmd !== "close" && _position.call(this);
 
 			console.log("refresh");
 
@@ -416,7 +416,7 @@
 			if(! kdialog ) //if instance not initiated, create one
 				kdialog = $.data(this, pluginName, new KDialog(this, options))
 			else //if already initiated, refresh
-				kdialog.refresh(options);
+				kdialog.refresh(options, cmd);
 			
 			//invoke the command
 			cmd && cmd != "refresh" && (cmd = kdialog[cmd]) && cmd.call(kdialog);
