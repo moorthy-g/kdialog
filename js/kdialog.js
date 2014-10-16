@@ -82,7 +82,7 @@
 			
 			//remove all inline styles
 			/* there is a problem in safari 5 & IOS 6 while using "removeAttribute('style')".
-			 using "setAttribute" to empty the style, serves the purpose*/
+			 using "setAttribute" to empty the style serves the purpose*/
 			this.wrapper.setAttribute("style", "");
 
 			this.busy = false;
@@ -243,7 +243,11 @@
 			if(!OLD_ANDROID && _self.settings.css === "animation" && ANIM_END_EVENT) {
 				$dialog.addClass("in");
 				animations = ANIM_PREFIXED + "Name";
-				if(dialog.style[animations] != "none") { //if any css animation to play, handle end event.
+				
+				/* use computed style to get the property value defined in css.
+				direct access, only works with inline properties */
+				/*getComputedStyle supports from IE9. IE9- doesn't execute this block*/
+				if(window.getComputedStyle(dialog)[animations] != "none") { //if any css animation to play, handle end event.
 					$dialog.on(ANIM_END_EVENT, function() {
 						$dialog.off(ANIM_END_EVENT);
 						$dialog.removeClass("in");
