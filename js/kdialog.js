@@ -44,33 +44,36 @@
 	KDialog.prototype = function() { //anonymous scope, builds object prototype
 
 		//static variables
-		var ANIM_PREFIXED, TRANS_PREFIXED, ANIM_END_EVENT, 
-		TRANS_END_EVENT, COUNT=0, OVERLAY, MODAL=0, EDGE_PADDING=20,
+		var ANIM_PREFIXED, TRANS_PREFIXED,
+		ANIM_END_EVENT = "animationend webkitAnimationEnd mozAnimationEnd",
+		TRANS_END_EVENT = "transitionend webkitTransitionEnd mozTransitionEnd",
+		COUNT=0, OVERLAY, MODAL=0, EDGE_PADDING=20,
 		OLD_ANDROID = /android [1-2\.]/i.test(navigator.userAgent.toLowerCase());
 
+
 		/*private methods -- kindof*/
-		//returns vendor prefixed property
-		var _getPrefixedProperty = function(prop) {
-			var prefix = ["webkit", "moz", "MS"], element = document.createElement("p");
+		//detect animation & transition support
+		var _detectSupports = function() {
 
-			if(element.style[prop] == "")
-				return prop; //return standard property
+			var prefixes = ["webkit","moz"], style = document.createElement("p").style;
 
-			prop = prop.charAt(0).toUpperCase() + prop.slice(1);
-			for(var i = 0; i<prefix.length; i++) {
-				if(element.style[prefix[i] + prop] == "")
-					return prefix[i] + prop; //return prefixed property
+			//check for standard property
+			if(style.animation !== undefined)
+				ANIM_PREFIXED = "animation";
+			if(style.transition !== undefined) 
+				TRANS_PREFIXED = "transition";
+
+			//check for prefixed property
+			for(var i=0, prefix; i<prefixes.length, prefix = prefixes[i]; i++) {
+				if(ANIM_PREFIXED && TRANS_PREFIXED)
+					break;
+				if(style[prefix+"Animation"] !== undefined)
+					ANIM_PREFIXED = prefix + "Animation";
+				if(style[prefix[i]+"Transition"] !== undefined)
+					TRANS_PREFIXED = prefix + "Transition";
+
 			}
-		};
 
-		//set values to static variables
-		var _initStaticScope = function() {
-			ANIM_PREFIXED = _getPrefixedProperty("animation"),
-			TRANS_PREFIXED = _getPrefixedProperty("transition");
-			if(ANIM_PREFIXED) //
-				ANIM_END_EVENT = ANIM_PREFIXED + (ANIM_PREFIXED === "animation"?"end":"End");
-			if(TRANS_PREFIXED) 
-				TRANS_END_EVENT = TRANS_PREFIXED + (TRANS_PREFIXED === "transition"?"end":"End");
 		};
 
 		var _open = function() {
@@ -240,10 +243,9 @@
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
-			if(!OLD_ANDROID && _self.settings.css === "animation" && ANIM_END_EVENT) {
+			if(_self.settings.css === "animation" && !OLD_ANDROID && ANIM_PREFIXED) {
 				$dialog.addClass("in");
 				animations = ANIM_PREFIXED + "Name";
-				
 				/* use computed style to get the property value defined in css.
 				direct access, only works with inline properties */
 				/*getComputedStyle supports from IE9. IE9- doesn't execute this block*/
@@ -258,7 +260,7 @@
 					_open.call(_self);
 				};
 			}
-			else if(!OLD_ANDROID && _self.settings.css === "transition" && TRANS_END_EVENT) {
+			else if(_self.settings.css === "transition" && !OLD_ANDROID && TRANS_PREFIXED) {
 
 				var transitFrom = _self.settings.transitFrom, transitTo = _self.settings.transitTo;
 
@@ -315,10 +317,10 @@
 			}
 
 			//go for css animation if css set to animation in options & browser supports animation
-			if(!OLD_ANDROID && _self.settings.css === "animation"  && ANIM_END_EVENT) { 
+			if(_self.settings.css === "animation" && !OLD_ANDROID && ANIM_PREFIXED) { 
 				$dialog.addClass("out");
 				animations = ANIM_PREFIXED + "Name";
-				if(dialog.style[animations] != "none") { //if any css animation to play, handle end event.
+				if(window.getComputedStyle(dialog)[animations] != "none") { //if any css animation to play, handle end event.
 					$dialog.on(ANIM_END_EVENT, function() {
 						$dialog.off(ANIM_END_EVENT).removeClass("out");
 						_close.call(_self);
@@ -328,7 +330,7 @@
 					_close.call(_self);
 				}
 			}
-			else if(!OLD_ANDROID && _self.settings.css === "transition" && TRANS_END_EVENT) {
+			else if(_self.settings.css === "transition" && !OLD_ANDROID && TRANS_PREFIXED) {
 
 				var transitFrom = _self.settings.transitFrom, transitTo = _self.settings.transitTo;
 
@@ -396,7 +398,7 @@
 			}
 		};
 
-		_initStaticScope();
+		_detectSupports();
 
 		//return public methods
 		return {
