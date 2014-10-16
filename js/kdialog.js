@@ -81,7 +81,10 @@
 		var _close = function() {
 			
 			//remove all inline styles
-			this.wrapper.removeAttribute("style");
+			/* there is a problem in safari 5 & IOS 6 while using "removeAttribute('style')".
+			 using "setAttribute" to empty the style, serves the purpose*/
+			this.wrapper.setAttribute("style", "");
+
 			this.busy = false;
 			this.isOpen = false;
 
@@ -332,7 +335,7 @@
 					$dialog.removeClass("transition from");
 
 					if(transitFrom) {
-						dialog.removeAttribute("style")
+						dialog.setAttribute("style", "");
 						dialog.style.display = "block";
 					}
 
