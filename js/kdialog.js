@@ -87,6 +87,8 @@
 			/* there is a problem in safari 5 & IOS 6 while using "removeAttribute('style')".
 			 using "setAttribute" to empty the style serves the purpose*/
 			this.wrapper.setAttribute("style", "");
+			/* in IE8, Empty string does't affect the style attribute. so, remove after making it empty*/
+			this.wrapper.removeAttribute("style");
 
 			this.busy = false;
 			this.isOpen = false;
@@ -342,6 +344,7 @@
 
 					if(transitFrom) {
 						dialog.setAttribute("style", "");
+						dialog.removeAttribute("style");
 						dialog.style.display = "block";
 					}
 
