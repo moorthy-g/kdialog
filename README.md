@@ -48,7 +48,7 @@ List of few useful properties that the instance provides.
 - `isOpen` indicates current dialog status.
 - `settings` an object holds current plugin options. you can view/modify options through this
 
-> note: Callbacks & Action handlers are excecutes in instance context, which means `this` keyword inside these handlers refers the current kdialog instance
+> note: Callbacks & Action handlers are excecute in instance context, which means `this` keyword inside these handlers refer the current kdialog instance
 
 
 ### Options
@@ -59,11 +59,11 @@ List of few useful properties that the instance provides.
 
 whether to use css animation or transition or nothing
 
-If `animation`, class `in` will be added to dialog as it opens & class `out` will be added to dialog as it closes. We should use these classes to bind animations
+If `animation`, class `in` will be added to dialog as it opens & class `out` will be added to dialog as it closes. We should use these classes to bind css animations
 
 If `transition`, use class `from` to determine the intial state for transition
 
-> Class `transition` will be added to dialog whenever it opens/closes. 
+> Also in `transition` mode, class `transition` will be added to dialog whenever it opens/closes. 
 > Transition details can be controlled using this class (delay, timing-function, ect...)
 
 > Note: Interested in dynamic transitions?? refer `transitFrom` , `transitTo` 
@@ -72,7 +72,7 @@ If `transition`, use class `from` to determine the intial state for transition
 #### modal (boolean)
 `Default: true`
 
-You know the purpose very well :)
+Its about the overlay. You know the purpose very well :)
 
 
 #### actionHandlers (object)
@@ -94,18 +94,18 @@ actionHandlers: {
     }
 }
 ```
-These action handlers listens for `continue` & `cancel` actions. If a user clicks any element inside dialog with `data-action="continue"` `data-action="cancel"`, its corresponding handler fires 
+These action handlers listen for `continue` & `cancel` actions. If a user clicks any element inside dialog with `data-action="continue"` `data-action="cancel"`, its corresponding handler fires 
 
-> note: `data-action="close"` is having a native handler. i.e if the user clicks any element with data-action="close", it closes the dialog
+> note: `data-action="close"` having native handler. i.e if the user clicks any element with data-action="close", it closes the dialog
 
-> note: Execution context would be always the instance.
+> note: Handlers execution context would be always the instance.
 
 
 #### wrapperClass (string)
 `Default: "kdefault"`
 
 Adds a class to the wrapper of the dialog. 
-> note: Its must, to change the default value to create your own custom theme dialog
+> note: It is must to change the default value to create your own dialog with custom theme.
 
 
 #### position [("auto"|integer|null), ("auto"|integer|null)]
@@ -140,7 +140,7 @@ transitTo: {
 Dialog animates from `transitFrom` to `transitTo` as it opens
 and animates from `transitTo` to `transitFrom` as it closes
 
-> Class `transition` will be added to dialog whenever it opens/closes. 
+> Also in `transition` mode, class `transition` will be added to dialog whenever it opens/closes. 
 > Transition details (delay, timing-function, ect...) can be controlled using this class.
 
 
@@ -168,7 +168,7 @@ It would be helpful to reposition the dialog on window resize
 
 
 ### Execution Flow
-This section isn't very important. But, It might help you to understand the plugin and help to do better.
+This section isn't very important. But, It might helps you to understand the plugin.
 
 
 ##### **Execution Flow: init**
@@ -178,7 +178,7 @@ This section isn't very important. But, It might help you to understand the plug
 
 ##### **Execution Flow: open**
 1. Runs through initiation flow (If instance not initiated before)
-2. Make the dialog visible for renderer `(i.e: display:block)`
+2. Makes the dialog visible for renderer `(i.e: display:block)`
    It would be helpful to get proper width, height, offset etc..
 3. Perform placement (if any)
 4. Fires `beforeOpen` callback
@@ -195,8 +195,8 @@ This section isn't very important. But, It might help you to understand the plug
 
 ##### **Execution Flow: destroy**
 1. Runs through close flow (If instance is open)
-2. Whipe out the entire dialog from DOM
-3. If no other kdialog instance in DOM, remove the overlay
+2. Whipes out the entire dialog from DOM
+3. If no other kdialog instance in DOM, removes the overlay
 
 ```
 Good luck & happy coding :)
