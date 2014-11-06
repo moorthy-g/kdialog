@@ -20,6 +20,7 @@
 			actionHandlers: {}, //[data-action] handlers
 			wrapperClass: "kdefault", //class to add in wrapper
 			position: ["auto","auto"], //null/auto/integer
+			watchForResize: false, //adjust dialog position as window resize
 			easyClose: false, //close on esc & close overlay tap
 			transitFrom: null, //object of animatable css properties
 			transitTo: null, //object of animatable css properties
@@ -47,6 +48,7 @@
 		var ANIM_PREFIXED, TRANS_PREFIXED,
 		ANIM_END_EVENT = "animationend webkitAnimationEnd mozAnimationEnd",
 		TRANS_END_EVENT = "transitionend webkitTransitionEnd mozTransitionEnd",
+		RESIZE_EVENT = "onorientationchange" in window?"orientationchange":"resize",
 		COUNT=0, OVERLAY, MODAL=0, EDGE_PADDING=20,
 		OLD_ANDROID = /android [1-2\.]/i.test(navigator.userAgent.toLowerCase());
 
@@ -105,7 +107,7 @@
 		var _position = function() {
 
 			//do position, only if the dialog has opened
-			if(!this.isOpen) return;
+			if(!this.isOpen && !this.settings.position) return;
 
 			var x = this.settings.position[0], y = this.settings.position[1], wrapper = this.wrapper;
 
@@ -233,8 +235,7 @@
 			_self.wrapper.style.display = "block";
 
 			//set position
-			if(_self.settings.position)
-				_position.call(_self);
+			_position.call(_self);
 
 			_self.settings.beforeOpen.call(_self); //callback
 
@@ -299,7 +300,16 @@
 					//close on overlay click
 					close.call(_self);	
 				});
-			}
+			};
+
+			//watch for resize
+			if(_self.settings.watchForResize) {
+				$(window).on(RESIZE_EVENT+".kdid"+_self.id, function(e){
+					_position.call(_self);
+					console.log("resize");
+				});
+			};
+			
 
 		};
 
@@ -317,6 +327,12 @@
 				$(document).off("keyup.kdid"+_self.id);
 				OVERLAY && $(OVERLAY).off("click.kdid"+_self.id);
 			}
+
+			//watch for resize
+			if(_self.settings.watchForResize) {
+				$(window).off(RESIZE_EVENT+".kdid"+_self.id);
+			}
+			
 
 			//go for css animation if css set to animation in options & browser supports animation
 			if(_self.settings.css === "animation" && !OLD_ANDROID && ANIM_PREFIXED) { 

@@ -115,6 +115,12 @@ The value of position is an array with two value. First value is horizontal plac
 i.e you should use css for positioning
 
 
+#### watchForResize (boolean)
+`Default: false`
+
+Listen for resize event then reposition the dialog
+
+
 #### easyClose (boolean)
 `Default: false`
 
