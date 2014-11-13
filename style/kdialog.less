@@ -1,22 +1,21 @@
-@import "lesshat";
 .kwrapper {
 	position: absolute;
 	left: 0;
 	top: -9999px;
 	z-index: 1000;
 	display: none;
-	.perspective(500px);
+	perspective: 500px;
 }
 .kdialog {
 	display: none;
 	&.in {
-		.animation(in 0.4s);
+		animation: in 0.4s;
 	}
 	&.out {
-		.animation(out 0.2s);
+		animation: out 0.2s;
 	}
 	&.transition {
-		.transition(all 0.5s);
+		transition: all 0.5s;
 	}
 	&.from {
 		opacity: 0;
@@ -51,5 +50,23 @@
 }
 
 // keyframes
-.keyframes(~"in, 0%{opacity:0; transform: scale(0.9)}100%{opacity:1; transform: scale(1)}");
-.keyframes(~"out, 0%{opacity:1; transform: scale(1);}100%{opacity:0; transform: scale(0.9)}");
+@keyframes in {
+	0% {
+		opacity:0; 
+		transform: scale(0.9);
+	}
+	100% {
+		opacity:1;
+		transform: scale(1);
+	}
+}
+@keyframes out {
+	0% {
+		opacity:1; 
+		transform: scale(1);
+	}
+	100% {
+		opacity:0;
+		transform: scale(0.9);
+	}
+}

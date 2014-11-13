@@ -19,22 +19,41 @@ module.exports = function(grunt) {
 			}
 		},
 		less: {
-			production: {
+			dev: {
+				options: {
+					cleancss: false
+				},
+				files: {
+					"style/kdialog.css" : "style/kdialog.less"
+			 	}
+			},
+			prod: {
 				options: {
 					cleancss: true
 				},
 				files: {
-					"style/kdialog.css" : "style/kdialog.less",
-					"dist/kdialog.css" : "style/kdialog.less",
+					"dist/kdialog.css" : "style/kdialog.less"
 			 	}
-			 }
+			}
+		},
+		autoprefixer: {
+			options: {
+				browsers: ['chrome > 10', 'firefox > 10', 'ie > 7', 'android > 2', 'ios > 5' ]
+			},
+			dev : {
+			    src: 'style/kdialog.css'
+			},
+			prod : {
+			    src: 'dist/kdialog.css'
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-autoprefixer');
 
 	//default task
-	grunt.registerTask("default", ["uglify", "less"]);
+	grunt.registerTask("default", ["uglify", "less", "autoprefixer"]);
 	grunt.registerTask("lessc", ["less"]);
 }
