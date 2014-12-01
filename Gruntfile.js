@@ -5,7 +5,8 @@ module.exports = function(grunt) {
 			options: {
 				banner: "/*** <%= pkg.title %>"+" v<%= pkg.version %>\n"+
 						"<%= pkg.description %>\n"+
-						"email: <%= pkg.author.email %> ***/\n"
+						"repo => <%= pkg.repository.url %>\n"+
+						"email => <%= pkg.author.email %> ***/\n"
 			},
 			minified: {
 				options: {

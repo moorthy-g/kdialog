@@ -1,6 +1,6 @@
 {
   "name": "kdialog.jquery",
-  "title": "kDialog",
+  "title": "kdialog",
   "version": "0.0.2-beta",
   "description": "A Facebook Friendly dialog, made to comply with awesome CSS & JS animations",
   "homepage": "",
@@ -25,6 +25,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/moorthy-g/kdialog.git"
+    "url": "https://git.int.krds.com/moorthy.g/kdialog"
   }
 }
